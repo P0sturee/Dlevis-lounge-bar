@@ -4,995 +4,933 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dlevis — Lounge & Bar · Pinhais</title>
+<title>Espaço Dlevis — Lounge & Bar · Pinhais</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/SplitText.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <style>
-/* ════════════════════════════════════════════
-   TOKENS
-════════════════════════════════════════════ */
-:root{
-  --ink:#04040a;
-  --ink2:#080810;
-  --smoke:#0e0e1c;
-  --plum:#1a0a2e;
-  --violet:#6a0dad;
-  --neon:#9b30ff;
-  --neon2:#c77dff;
-  --ice:#a8d8f0;
-  --ember:#ff6b2b;
-  --gold:#d4a843;
-  --gold2:#f0c96a;
-  --chalk:#ede9f5;
-  --mist:rgba(237,233,245,.55);
-  --glass:rgba(255,255,255,.04);
-  --glass2:rgba(255,255,255,.07);
-  --border:rgba(155,48,255,.18);
-  --border2:rgba(255,255,255,.07);
+:root {
+  --black: #040408;
+  --deep: #08080f;
+  --violet: #7b2fff;
+  --violet-dim: #5a1fcc;
+  --pink: #e040fb;
+  --pink-dim: #b020d0;
+  --blue: #00b4ff;
+  --blue-dim: #0080cc;
+  --gold: #c9a84c;
+  --gold-light: #f0d080;
+  --glass: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
+  --text: #e8e0f0;
+  --muted: rgba(232,224,240,0.55);
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-body: 'DM Sans', sans-serif;
 }
 
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;font-size:16px}
-body{
-background:var(–ink);
-color:var(–chalk);
-font-family:‘Outfit’,sans-serif;
-overflow-x:hidden;
-cursor:none;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body {
+background: var(–black);
+color: var(–text);
+font-family: var(–font-body);
+overflow-x: hidden;
+cursor: none;
 }
 
-/* ── SCROLLBAR */
-::-webkit-scrollbar{width:3px}
-::-webkit-scrollbar-track{background:var(–ink)}
-::-webkit-scrollbar-thumb{background:var(–neon);border-radius:2px}
+/* ─── CUSTOM CURSOR ─── */
+#cursor {
+width: 12px; height: 12px;
+background: var(–violet);
+border-radius: 50%;
+position: fixed; top: 0; left: 0;
+pointer-events: none; z-index: 9999;
+transform: translate(-50%,-50%);
+transition: background 0.2s, transform 0.15s;
+mix-blend-mode: screen;
+}
+#cursor-trail {
+width: 32px; height: 32px;
+border: 1px solid rgba(123,47,255,0.4);
+border-radius: 50%;
+position: fixed; top: 0; left: 0;
+pointer-events: none; z-index: 9998;
+transform: translate(-50%,-50%);
+transition: all 0.12s ease;
+}
+body:has(a:hover) #cursor, body:has(button:hover) #cursor { transform: translate(-50%,-50%) scale(2.5); background: var(–pink); }
 
-/* ── CURSOR */
-#cur,#cur-ring{
-position:fixed;top:0;left:0;
-border-radius:50%;
-pointer-events:none;
-z-index:99999;
-mix-blend-mode:screen;
-transform:translate(-50%,-50%);
-will-change:transform;
+/* ─── LOADER ─── */
+#loader {
+position: fixed; inset: 0;
+background: var(–black);
+z-index: 10000;
+display: flex; flex-direction: column;
+align-items: center; justify-content: center;
+gap: 24px;
 }
-#cur{
-width:8px;height:8px;
-background:var(–neon2);
-transition:width .2s,height .2s,background .2s;
+.loader-logo {
+font-family: var(–font-display);
+font-size: clamp(40px, 8vw, 80px);
+letter-spacing: 0.15em;
+background: linear-gradient(135deg, var(–violet), var(–pink), var(–blue));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+opacity: 0;
 }
-#cur-ring{
-width:32px;height:32px;
-border:1px solid rgba(155,48,255,.5);
-transition:width .25s,height .25s,border-color .2s;
+.loader-bar {
+width: 200px; height: 1px;
+background: rgba(255,255,255,0.1);
+position: relative; overflow: hidden;
 }
-body.cur-hover #cur{width:18px;height:18px;background:var(–ice)}
-body.cur-hover #cur-ring{width:50px;height:50px;border-color:var(–ice)}
-
-/* ── LOADER */
-#loader{
-position:fixed;inset:0;z-index:99997;
-background:var(–ink);
-display:flex;align-items:center;justify-content:center;
-flex-direction:column;gap:32px;
+.loader-bar::after {
+content: ‘’;
+position: absolute; top: 0; left: -100%;
+width: 100%; height: 100%;
+background: linear-gradient(90deg, var(–violet), var(–pink));
+animation: loaderBar 1.8s ease forwards;
 }
-.ld-wordmark{
-font-family:‘Bebas Neue’,sans-serif;
-font-size:clamp(3rem,10vw,7rem);
-letter-spacing:.15em;
-background:linear-gradient(120deg,var(–gold2),var(–neon2),var(–ice));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-clip-path:inset(0 100% 0 0);
-}
-.ld-bar-wrap{width:180px;height:1px;background:rgba(255,255,255,.1)}
-.ld-bar{height:100%;width:0;background:linear-gradient(90deg,var(–violet),var(–neon2),var(–gold2))}
-.ld-sub{
-font-size:.65rem;letter-spacing:.55em;text-transform:uppercase;
-color:rgba(237,233,245,.3);
-opacity:0;
-}
-
-/* ── CANVAS / FX */
-#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
-.noise{
-position:fixed;inset:0;z-index:1;pointer-events:none;
-background-image:url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 200 200’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=’.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23n)’ opacity=‘1’/%3E%3C/svg%3E”);
-opacity:.025;
-mix-blend-mode:overlay;
+@keyframes loaderBar { to { left: 100%; } }
+.loader-text {
+font-size: 11px; letter-spacing: 0.3em;
+color: var(–muted); text-transform: uppercase;
 }
 
-/* ── NAV */
-nav{
-position:fixed;top:0;left:0;right:0;z-index:900;
-display:flex;align-items:center;justify-content:space-between;
-padding:0 5%;height:70px;
-transition:background .5s,border-color .5s;
-border-bottom:1px solid transparent;
-}
-nav.stuck{
-background:rgba(4,4,10,.88);
-backdrop-filter:blur(24px);
-border-bottom-color:var(–border2);
-}
-.nav-logo{
-font-family:‘Bebas Neue’,sans-serif;
-font-size:1.5rem;letter-spacing:.2em;
-color:var(–chalk);text-decoration:none;
-display:flex;align-items:center;gap:.5rem;
-}
-.nav-logo span{
-display:inline-block;
-background:linear-gradient(135deg,var(–gold),var(–neon2));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.nav-logo em{font-style:normal;font-size:.8rem;color:rgba(237,233,245,.35);letter-spacing:.35em;font-family:‘Outfit’,sans-serif;font-weight:300;align-self:flex-end;margin-bottom:2px}
-.nav-links{
-display:flex;align-items:center;gap:2.5rem;
-list-style:none;
-}
-.nav-links a{
-font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
-color:rgba(237,233,245,.55);text-decoration:none;
-transition:color .3s;position:relative;
-}
-.nav-links a:hover{color:var(–chalk)}
-.nav-links a::after{
-content:’’;position:absolute;bottom:-4px;left:0;right:0;
-height:1px;background:var(–neon);
-transform:scaleX(0);transform-origin:left;transition:transform .35s;
-}
-.nav-links a:hover::after{transform:scaleX(1)}
-
-.nav-cta{
-font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
-padding:.5rem 1.4rem;border-radius:2px;
-border:1px solid var(–neon);
-color:var(–neon);
-text-decoration:none;
-transition:all .3s;
-white-space:nowrap;
-position:relative;overflow:hidden;
-}
-.nav-cta::before{
-content:’’;position:absolute;inset:0;
-background:var(–neon);
-transform:translateX(-101%);transition:transform .35s cubic-bezier(.4,0,.2,1);
-z-index:-1;
-}
-.nav-cta:hover{color:var(–ink)}
-.nav-cta:hover::before{transform:translateX(0)}
-
-.burger{
-display:none;flex-direction:column;gap:5px;
-cursor:none;padding:4px;
-}
-.burger span{display:block;width:22px;height:1px;background:var(–chalk);transition:transform .3s,opacity .3s}
-.burger.on span:nth-child(1){transform:rotate(45deg)translate(4px,4px)}
-.burger.on span:nth-child(2){opacity:0}
-.burger.on span:nth-child(3){transform:rotate(-45deg)translate(4px,-4px)}
-
-.mob-nav{
-display:none;position:fixed;
-top:70px;inset-x:0;
-background:rgba(4,4,10,.97);backdrop-filter:blur(30px);
-border-bottom:1px solid var(–border2);
-padding:2.5rem 5%;
-flex-direction:column;gap:1.8rem;
-z-index:899;
-}
-.mob-nav.on{display:flex}
-.mob-nav a{
-font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;
-color:rgba(237,233,245,.7);text-decoration:none;
-border-bottom:1px solid var(–border2);padding-bottom:1.2rem;
+/* ─── PARTICLES CANVAS ─── */
+#particles-canvas {
+position: fixed; inset: 0;
+pointer-events: none; z-index: 0;
+opacity: 0.6;
 }
 
-/* ── HERO */
-#hero{
-min-height:100vh;
-display:flex;align-items:center;
-position:relative;overflow:hidden;
+/* ─── NOISE OVERLAY ─── */
+body::before {
+content: ‘’;
+position: fixed; inset: 0;
+background-image: url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’ opacity=‘0.03’/%3E%3C/svg%3E”);
+pointer-events: none; z-index: 1; opacity: 0.4;
 }
 
-/* Layered cinematic background */
-.hero-bg-layer{
-position:absolute;inset:0;
+/* ─── NAV ─── */
+nav {
+position: fixed; top: 0; left: 0; right: 0;
+z-index: 1000;
+padding: 0 5vw;
+display: flex; align-items: center; justify-content: space-between;
+height: 72px;
+transition: all 0.4s ease;
+}
+nav.scrolled {
+background: rgba(4,4,8,0.85);
+backdrop-filter: blur(20px);
+border-bottom: 1px solid var(–glass-border);
+height: 60px;
+}
+.nav-logo {
+font-family: var(–font-display);
+font-size: 24px; letter-spacing: 0.1em;
+background: linear-gradient(90deg, var(–violet), var(–pink));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+text-decoration: none;
+}
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+color: var(–muted);
+text-decoration: none;
+font-size: 12px; letter-spacing: 0.2em;
+text-transform: uppercase;
+transition: color 0.3s;
+position: relative;
+}
+.nav-links a::after {
+content: ‘’;
+position: absolute; bottom: -4px; left: 0; right: 0;
+height: 1px;
+background: linear-gradient(90deg, var(–violet), var(–pink));
+transform: scaleX(0); transform-origin: left;
+transition: transform 0.3s;
+}
+.nav-links a:hover { color: var(–text); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-cta {
+background: linear-gradient(135deg, var(–violet), var(–pink));
+color: #fff !important;
+padding: 10px 24px;
+border-radius: 2px;
+font-size: 11px !important;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+text-decoration: none;
+transition: all 0.3s !important;
+box-shadow: 0 0 20px rgba(123,47,255,0.3);
+}
+.nav-cta:hover { box-shadow: 0 0 35px rgba(224,64,251,0.5) !important; transform: translateY(-1px); }
+.nav-cta::after { display: none !important; }
+
+/* ─── HAMBURGER ─── */
+.hamburger {
+display: none;
+flex-direction: column; gap: 5px;
+background: none; border: none;
+cursor: pointer; padding: 8px;
+}
+.hamburger span {
+display: block; width: 24px; height: 1.5px;
+background: var(–text); transition: all 0.3s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ─── MOBILE MENU ─── */
+.mobile-menu {
+display: none;
+position: fixed; inset: 0;
+background: rgba(4,4,8,0.97);
+backdrop-filter: blur(30px);
+z-index: 999;
+flex-direction: column;
+align-items: center; justify-content: center;
+gap: 40px;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+font-family: var(–font-display);
+font-size: 36px; letter-spacing: 0.1em;
+color: var(–text); text-decoration: none;
+transition: all 0.3s;
+}
+.mobile-menu a:hover {
+background: linear-gradient(90deg, var(–violet), var(–pink));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+/* ─── HERO ─── */
+#hero {
+position: relative;
+min-height: 100vh;
+display: flex; align-items: center; justify-content: center;
+overflow: hidden;
+}
+.hero-bg {
+position: absolute; inset: 0;
 background:
-radial-gradient(ellipse 70% 80% at 60% 110%,rgba(106,13,173,.55) 0%,transparent 65%),
-radial-gradient(ellipse 50% 40% at 5% 40%,rgba(155,48,255,.12) 0%,transparent 60%),
-radial-gradient(ellipse 40% 30% at 95% 10%,rgba(168,216,240,.08) 0%,transparent 50%),
-linear-gradient(175deg,#06030f 0%,#04040a 55%,#0b0418 100%);
+radial-gradient(ellipse 80% 60% at 20% 50%, rgba(123,47,255,0.15) 0%, transparent 60%),
+radial-gradient(ellipse 60% 80% at 80% 30%, rgba(224,64,251,0.12) 0%, transparent 60%),
+radial-gradient(ellipse 50% 50% at 50% 90%, rgba(0,180,255,0.08) 0%, transparent 60%),
+linear-gradient(180deg, #040408 0%, #06060e 50%, #040408 100%);
 }
-/* Grid lines */
-.hero-grid{
-position:absolute;inset:0;
+.hero-grid {
+position: absolute; inset: 0;
 background-image:
-linear-gradient(rgba(155,48,255,.07) 1px,transparent 1px),
-linear-gradient(90deg,rgba(155,48,255,.07) 1px,transparent 1px);
-background-size:80px 80px;
-mask-image:radial-gradient(ellipse 80% 70% at 50% 80%,black 10%,transparent 80%);
+linear-gradient(rgba(123,47,255,0.04) 1px, transparent 1px),
+linear-gradient(90deg, rgba(123,47,255,0.04) 1px, transparent 1px);
+background-size: 80px 80px;
+mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
 }
-/* Diagonal accent stripe */
-.hero-stripe{
-position:absolute;
-width:3px;height:60%;
-background:linear-gradient(var(–neon),transparent);
-top:0;right:22%;
-transform:skewX(-15deg);
-opacity:.3;
-filter:blur(1px);
+.hero-orb {
+position: absolute;
+border-radius: 50%;
+filter: blur(80px);
+animation: orbFloat 8s ease-in-out infinite;
+}
+.hero-orb-1 {
+width: 600px; height: 600px;
+background: rgba(123,47,255,0.12);
+top: -200px; left: -100px;
+animation-delay: 0s;
+}
+.hero-orb-2 {
+width: 400px; height: 400px;
+background: rgba(224,64,251,0.1);
+bottom: -100px; right: -50px;
+animation-delay: -3s;
+}
+.hero-orb-3 {
+width: 300px; height: 300px;
+background: rgba(0,180,255,0.08);
+top: 40%; right: 20%;
+animation-delay: -5s;
+}
+@keyframes orbFloat {
+0%, 100% { transform: translateY(0) scale(1); }
+50% { transform: translateY(-30px) scale(1.05); }
+}
+.hero-content {
+position: relative; z-index: 10;
+text-align: center;
+max-width: 1000px; padding: 0 5vw;
+}
+.hero-eyebrow {
+display: inline-flex; align-items: center; gap: 12px;
+font-size: 11px; letter-spacing: 0.4em; text-transform: uppercase;
+color: var(–gold); margin-bottom: 28px;
+opacity: 0; transform: translateY(20px);
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+content: ‘’; width: 40px; height: 1px;
+background: linear-gradient(90deg, transparent, var(–gold));
+}
+.hero-eyebrow::after { background: linear-gradient(90deg, var(–gold), transparent); }
+.hero-title {
+font-family: var(–font-display);
+font-size: clamp(56px, 10vw, 140px);
+line-height: 0.9;
+letter-spacing: 0.03em;
+text-transform: uppercase;
+color: var(–text);
+margin-bottom: 20px;
+opacity: 0; transform: translateY(40px);
+}
+.hero-title .glow-text {
+background: linear-gradient(135deg, var(–violet) 0%, var(–pink) 50%, var(–blue) 100%);
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+filter: drop-shadow(0 0 30px rgba(224,64,251,0.4));
+}
+.hero-title .outline-text {
+-webkit-text-stroke: 1px rgba(255,255,255,0.15);
+-webkit-text-fill-color: transparent;
+}
+.hero-subtitle {
+font-family: var(–font-serif);
+font-size: clamp(16px, 2.5vw, 22px);
+font-style: italic; font-weight: 300;
+color: var(–muted);
+max-width: 600px; margin: 0 auto 48px;
+line-height: 1.6;
+opacity: 0; transform: translateY(20px);
+}
+.hero-actions {
+display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+opacity: 0; transform: translateY(20px);
+}
+.btn-primary {
+position: relative;
+display: inline-flex; align-items: center; gap: 10px;
+padding: 16px 40px;
+background: linear-gradient(135deg, var(–violet), var(–pink));
+color: #fff;
+font-family: var(–font-body);
+font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
+text-decoration: none;
+border: none; cursor: pointer;
+clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+transition: all 0.3s;
+overflow: hidden;
+}
+.btn-primary::before {
+content: ‘’;
+position: absolute; inset: 0;
+background: linear-gradient(135deg, var(–pink), var(–violet));
+opacity: 0; transition: opacity 0.3s;
+}
+.btn-primary:hover { box-shadow: 0 0 40px rgba(224,64,251,0.5), 0 0 80px rgba(224,64,251,0.2); transform: translateY(-2px); }
+.btn-primary:hover::before { opacity: 1; }
+.btn-primary span { position: relative; z-index: 1; }
+@keyframes glowPulse {
+0%, 100% { box-shadow: 0 0 20px rgba(123,47,255,0.4), 0 0 40px rgba(224,64,251,0.2); }
+50% { box-shadow: 0 0 40px rgba(123,47,255,0.7), 0 0 80px rgba(224,64,251,0.4); }
+}
+.btn-primary { animation: glowPulse 2.5s ease-in-out infinite; }
+.btn-secondary {
+display: inline-flex; align-items: center; gap: 10px;
+padding: 15px 40px;
+background: transparent;
+color: var(–text);
+font-family: var(–font-body);
+font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
+text-decoration: none;
+border: 1px solid rgba(255,255,255,0.15);
+clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+transition: all 0.3s;
+backdrop-filter: blur(10px);
+}
+.btn-secondary:hover {
+border-color: rgba(123,47,255,0.5);
+background: rgba(123,47,255,0.1);
+color: #fff;
+box-shadow: 0 0 20px rgba(123,47,255,0.2);
+}
+.hero-stats {
+position: absolute; bottom: 60px; left: 0; right: 0;
+display: flex; justify-content: center; gap: 60px;
+opacity: 0;
+}
+.hero-stat { text-align: center; }
+.hero-stat-number {
+font-family: var(–font-display);
+font-size: 36px; letter-spacing: 0.05em;
+background: linear-gradient(135deg, var(–violet), var(–pink));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+display: block;
+}
+.hero-stat-label { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(–muted); }
+.hero-scroll {
+position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+display: flex; flex-direction: column; align-items: center; gap: 8px;
+color: var(–muted); font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+animation: scrollBounce 2s ease-in-out infinite;
+opacity: 0;
+}
+.hero-scroll-line {
+width: 1px; height: 40px;
+background: linear-gradient(180deg, var(–violet), transparent);
+}
+@keyframes scrollBounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+/* ─── SECTION BASE ─── */
+section { position: relative; z-index: 2; }
+.section-header { text-align: center; margin-bottom: 80px; }
+.section-tag {
+display: inline-flex; align-items: center; gap: 10px;
+font-size: 10px; letter-spacing: 0.4em; text-transform: uppercase;
+color: var(–violet); margin-bottom: 16px;
+}
+.section-tag::before {
+content: ‘’; width: 20px; height: 1px;
+background: var(–violet);
+}
+.section-title {
+font-family: var(–font-display);
+font-size: clamp(36px, 6vw, 72px);
+letter-spacing: 0.05em; line-height: 1;
+text-transform: uppercase;
+}
+.section-title .accent {
+background: linear-gradient(135deg, var(–violet), var(–pink));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.section-divider {
+width: 60px; height: 2px;
+background: linear-gradient(90deg, var(–violet), var(–pink));
+margin: 20px auto;
+}
+.section-subtitle {
+font-family: var(–font-serif);
+font-size: 18px; font-style: italic; font-weight: 300;
+color: var(–muted); max-width: 500px; margin: 0 auto;
 }
 
-.hero-inner{
-position:relative;z-index:5;
-width:100%;padding:0 5%;
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:60px;align-items:center;
-max-width:1400px;margin:0 auto;
-padding-top:100px;padding-bottom:60px;
+/* ─── SOBRE ─── */
+#sobre {
+padding: 120px 5vw;
+display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+align-items: center; max-width: 1300px; margin: 0 auto;
+}
+.sobre-visual {
+position: relative;
+}
+.sobre-frame {
+position: relative;
+background: var(–glass);
+border: 1px solid var(–glass-border);
+backdrop-filter: blur(20px);
+border-radius: 2px;
+padding: 60px;
+overflow: hidden;
+}
+.sobre-frame::before {
+content: ‘’;
+position: absolute; inset: 0;
+background: radial-gradient(ellipse at 30% 30%, rgba(123,47,255,0.15), transparent 60%);
+}
+.sobre-big-number {
+font-family: var(–font-display);
+font-size: 180px;
+line-height: 1;
+background: linear-gradient(135deg, rgba(123,47,255,0.2), rgba(224,64,251,0.1));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+position: absolute; top: -20px; right: -10px;
+pointer-events: none;
+}
+.sobre-badge {
+display: inline-flex; align-items: center; gap: 8px;
+background: linear-gradient(135deg, rgba(123,47,255,0.2), rgba(224,64,251,0.2));
+border: 1px solid rgba(123,47,255,0.3);
+padding: 8px 16px; border-radius: 2px;
+font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+color: var(–pink); margin-bottom: 24px;
+}
+.sobre-detail-number {
+font-family: var(–font-display);
+font-size: 80px; letter-spacing: 0.05em;
+background: linear-gradient(135deg, var(–violet), var(–pink));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+position: relative; z-index: 1;
+}
+.sobre-detail-label { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(–muted); }
+.sobre-dots {
+position: absolute; bottom: 20px; left: 20px;
+display: grid; grid-template-columns: repeat(6, 8px); gap: 6px;
+}
+.sobre-dot {
+width: 4px; height: 4px; border-radius: 50%;
+background: rgba(123,47,255,0.3);
+}
+.sobre-dot.active { background: var(–violet); }
+.sobre-text-content { position: relative; }
+.sobre-text-content .section-tag { justify-content: flex-start; }
+.sobre-heading {
+font-family: var(–font-display);
+font-size: clamp(32px, 4vw, 52px);
+letter-spacing: 0.05em; text-transform: uppercase;
+line-height: 1.1; margin-bottom: 24px;
+}
+.sobre-heading .accent {
+background: linear-gradient(135deg, var(–violet), var(–pink));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.sobre-desc {
+font-family: var(–font-serif);
+font-size: 18px; font-weight: 300; line-height: 1.8;
+color: var(–muted); margin-bottom: 40px;
+}
+.sobre-features { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
+.sobre-feature {
+display: flex; align-items: center; gap: 16px;
+font-size: 13px; letter-spacing: 0.05em; color: var(–muted);
+}
+.sobre-feature-icon {
+width: 36px; height: 36px; flex-shrink: 0;
+display: flex; align-items: center; justify-content: center;
+background: rgba(123,47,255,0.15);
+border: 1px solid rgba(123,47,255,0.2);
+font-size: 16px;
 }
 
-.hero-left{}
-.hero-label{
-display:inline-flex;align-items:center;gap:.7rem;
-font-size:.65rem;letter-spacing:.55em;text-transform:uppercase;
-color:var(–gold);margin-bottom:2rem;
-opacity:0;
+/* ─── EXPERIÊNCIA ─── */
+#experiencia { padding: 120px 5vw; }
+.exp-grid {
+display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+gap: 2px; max-width: 1300px; margin: 0 auto;
 }
-.hero-label::before{content:’’;width:30px;height:1px;background:var(–gold)}
-
-.hero-h1{
-font-family:‘Bebas Neue’,sans-serif;
-font-size:clamp(3.5rem,7vw,6.5rem);
-line-height:.95;letter-spacing:.03em;
-margin-bottom:1rem;
-opacity:0;
+.exp-card {
+position: relative;
+background: var(–glass);
+border: 1px solid var(–glass-border);
+padding: 48px 36px;
+overflow: hidden;
+transition: all 0.4s ease;
+backdrop-filter: blur(10px);
+cursor: pointer;
 }
-.hero-h1 .line{display:block;overflow:hidden}
-.hero-h1 .hi{
-background:linear-gradient(100deg,var(–chalk) 0%,var(–neon2) 60%,var(–ice) 100%);
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+.exp-card::before {
+content: ‘’;
+position: absolute; inset: 0;
+background: linear-gradient(135deg, rgba(123,47,255,0.1), rgba(224,64,251,0.05));
+opacity: 0; transition: opacity 0.4s;
 }
-.hero-h1 .h2{
-color:rgba(237,233,245,.18);
--webkit-text-stroke:1px rgba(237,233,245,.25);
--webkit-text-fill-color:transparent;
+.exp-card::after {
+content: ‘’;
+position: absolute; bottom: 0; left: 0; right: 0;
+height: 2px;
+background: linear-gradient(90deg, var(–violet), var(–pink));
+transform: scaleX(0); transform-origin: left;
+transition: transform 0.4s;
 }
-
-.hero-sub{
-font-family:‘DM Serif Display’,serif;
-font-style:italic;
-font-size:clamp(1rem,2vw,1.3rem);
-color:rgba(237,233,245,.6);
-line-height:1.7;margin-bottom:2.5rem;
-font-weight:400;
-opacity:0;
+.exp-card:hover { transform: translateY(-8px); border-color: rgba(123,47,255,0.3); }
+.exp-card:hover::before { opacity: 1; }
+.exp-card:hover::after { transform: scaleX(1); }
+.exp-card:hover .exp-icon { box-shadow: 0 0 40px rgba(123,47,255,0.4); }
+.exp-number {
+position: absolute; top: 20px; right: 24px;
+font-family: var(–font-display);
+font-size: 60px; letter-spacing: 0.05em;
+color: rgba(255,255,255,0.03); pointer-events: none;
 }
-
-.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;opacity:0}
-
-.btn-glow{
-display:inline-flex;align-items:center;gap:.6rem;
-padding:.9rem 2rem;border-radius:3px;
-font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;
-background:linear-gradient(135deg,var(–violet),var(–neon));
-color:var(–chalk);text-decoration:none;cursor:none;
-border:1px solid var(–neon);
-position:relative;overflow:hidden;
-box-shadow:0 0 30px rgba(155,48,255,.3),inset 0 1px 0 rgba(255,255,255,.1);
-transition:box-shadow .35s,transform .3s;
+.exp-icon {
+width: 64px; height: 64px;
+display: flex; align-items: center; justify-content: center;
+background: linear-gradient(135deg, rgba(123,47,255,0.2), rgba(224,64,251,0.1));
+border: 1px solid rgba(123,47,255,0.25);
+font-size: 28px; margin-bottom: 24px;
+position: relative; z-index: 1;
+transition: box-shadow 0.4s;
 }
-.btn-glow::after{
-content:’’;position:absolute;
-top:-50%;left:-60%;width:40%;height:200%;
-background:rgba(255,255,255,.12);
-transform:skewX(-20deg);
-transition:left .5s;
+.exp-title {
+font-family: var(–font-display);
+font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase;
+margin-bottom: 12px; position: relative; z-index: 1;
 }
-.btn-glow:hover{
-box-shadow:0 0 60px rgba(155,48,255,.6),0 0 120px rgba(155,48,255,.2);
-transform:translateY(-2px);
-}
-.btn-glow:hover::after{left:130%}
-
-.btn-outline{
-display:inline-flex;align-items:center;gap:.6rem;
-padding:.9rem 2rem;border-radius:3px;
-font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;
-background:transparent;
-border:1px solid rgba(237,233,245,.2);
-color:rgba(237,233,245,.75);text-decoration:none;cursor:none;
-transition:all .35s;
-}
-.btn-outline:hover{
-border-color:var(–ice);color:var(–ice);
-box-shadow:0 0 30px rgba(168,216,240,.15);
-transform:translateY(-2px);
+.exp-desc {
+font-size: 14px; line-height: 1.7; color: var(–muted);
+position: relative; z-index: 1;
 }
 
-/* Hero right — visual card stack */
-.hero-right{
-position:relative;
-height:520px;opacity:0;
+/* ─── GALERIA ─── */
+#galeria { padding: 120px 5vw; }
+.gallery-grid {
+display: grid;
+grid-template-columns: repeat(12, 1fr);
+grid-template-rows: repeat(3, 220px);
+gap: 4px;
+max-width: 1300px; margin: 0 auto;
 }
-.hero-card{
-position:absolute;
-border-radius:6px;
-overflow:hidden;
-border:1px solid var(–border);
+.gallery-item {
+position: relative; overflow: hidden;
+cursor: pointer;
 }
-.hc1{width:280px;height:380px;top:0;left:10%}
-.hc2{width:220px;height:280px;bottom:0;right:0}
-.hc3{width:160px;height:160px;top:30%;left:0}
+.gallery-item:nth-child(1) { grid-column: 1/6; grid-row: 1/3; }
+.gallery-item:nth-child(2) { grid-column: 6/9; grid-row: 1/2; }
+.gallery-item:nth-child(3) { grid-column: 9/13; grid-row: 1/2; }
+.gallery-item:nth-child(4) { grid-column: 6/10; grid-row: 2/3; }
+.gallery-item:nth-child(5) { grid-column: 10/13; grid-row: 2/3; }
+.gallery-item:nth-child(6) { grid-column: 1/5; grid-row: 3/4; }
+.gallery-item:nth-child(7) { grid-column: 5/9; grid-row: 3/4; }
+.gallery-item:nth-child(8) { grid-column: 9/13; grid-row: 3/4; }
+.gallery-bg {
+position: absolute; inset: 0;
+display: flex; align-items: center; justify-content: center;
+transition: transform 0.6s ease;
+font-size: 80px;
+}
+.gallery-item:hover .gallery-bg { transform: scale(1.08); }
+.gallery-overlay {
+position: absolute; inset: 0;
+background: linear-gradient(135deg, rgba(123,47,255,0.7), rgba(224,64,251,0.5));
+opacity: 0; transition: opacity 0.4s;
+display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px;
+}
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-overlay-icon { font-size: 32px; }
+.gallery-overlay-text { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; }
 
-.hero-card-bg{
-width:100%;height:100%;
-display:flex;align-items:center;justify-content:center;
-flex-direction:column;gap:.8rem;
-transition:transform .6s;
-position:relative;
-}
-.hero-card:hover .hero-card-bg{transform:scale(1.04)}
+/* gallery color themes */
+.g1 { background: linear-gradient(135deg, #1a0a2e, #2d0a4e); }
+.g2 { background: linear-gradient(135deg, #0a0a1e, #1a0a2e); }
+.g3 { background: linear-gradient(135deg, #1e0a1e, #2e0a1e); }
+.g4 { background: linear-gradient(135deg, #0a1e2e, #0a0a2e); }
+.g5 { background: linear-gradient(135deg, #1e1a0a, #2e0a1e); }
+.g6 { background: linear-gradient(135deg, #0a1a0a, #1a0a2e); }
+.g7 { background: linear-gradient(135deg, #1a1a0a, #0a0a2e); }
+.g8 { background: linear-gradient(135deg, #2e0a0a, #1a0a2e); }
 
-.hcb1{background:radial-gradient(ellipse at 40% 60%,rgba(106,13,173,.8),rgba(4,4,10,.95)),repeating-linear-gradient(60deg,rgba(155,48,255,.04) 0,rgba(155,48,255,.04) 1px,transparent 1px,transparent 40px)}
-.hcb2{background:radial-gradient(ellipse at 70% 30%,rgba(168,216,240,.25),rgba(4,4,10,.95))}
-.hcb3{background:radial-gradient(circle,rgba(212,168,67,.35),rgba(4,4,10,.95))}
+/* ─── LIGHTBOX ─── */
+#lightbox {
+position: fixed; inset: 0; z-index: 9000;
+background: rgba(0,0,0,0.95);
+backdrop-filter: blur(20px);
+display: none; align-items: center; justify-content: center;
+}
+#lightbox.active { display: flex; }
+#lightbox-content {
+max-width: 80vw; max-height: 80vh;
+font-size: 150px;
+text-align: center;
+}
+#lightbox-close {
+position: absolute; top: 30px; right: 30px;
+background: none; border: 1px solid rgba(255,255,255,0.2);
+color: var(–text); width: 44px; height: 44px;
+display: flex; align-items: center; justify-content: center;
+cursor: pointer; font-size: 18px; transition: all 0.3s;
+}
+#lightbox-close:hover { background: var(–violet); border-color: var(–violet); }
 
-.hc-icon{font-size:3.5rem;filter:drop-shadow(0 0 20px rgba(155,48,255,.6));animation:flt 4s ease-in-out infinite}
-.hc2 .hc-icon{font-size:2.5rem;animation-delay:-1.5s}
-.hc3 .hc-icon{font-size:2rem;animation-delay:-3s}
-@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+/* ─── AVALIAÇÕES ─── */
+#avaliacoes { padding: 120px 5vw; overflow: hidden; }
+.reviews-track-wrap { overflow: hidden; margin: 0 -5vw; }
+.reviews-track {
+display: flex; gap: 24px;
+animation: reviewScroll 30s linear infinite;
+width: max-content;
+}
+.reviews-track:hover { animation-play-state: paused; }
+@keyframes reviewScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.review-card {
+flex-shrink: 0; width: 360px;
+background: var(–glass);
+border: 1px solid var(–glass-border);
+backdrop-filter: blur(20px);
+padding: 36px; position: relative;
+transition: all 0.3s;
+}
+.review-card::before {
+content: ‘”’;
+position: absolute; top: 20px; right: 28px;
+font-family: var(–font-serif);
+font-size: 80px; line-height: 1;
+color: rgba(123,47,255,0.15); pointer-events: none;
+}
+.review-card:hover {
+border-color: rgba(123,47,255,0.3);
+box-shadow: 0 0 30px rgba(123,47,255,0.1);
+}
+.review-stars {
+display: flex; gap: 4px; margin-bottom: 16px;
+font-size: 14px;
+}
+.review-text {
+font-family: var(–font-serif);
+font-size: 17px; font-style: italic; font-weight: 300;
+line-height: 1.7; color: var(–text); margin-bottom: 24px;
+}
+.review-author { display: flex; align-items: center; gap: 12px; }
+.review-avatar {
+width: 40px; height: 40px; border-radius: 50%;
+background: linear-gradient(135deg, var(–violet), var(–pink));
+display: flex; align-items: center; justify-content: center;
+font-size: 18px; flex-shrink: 0;
+}
+.review-name { font-size: 13px; font-weight: 500; letter-spacing: 0.05em; }
+.review-meta { font-size: 11px; color: var(–muted); letter-spacing: 0.05em; }
 
-.hc-badge{
-font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;
-color:rgba(237,233,245,.5);
+/* ─── RESERVA ─── */
+#reserva {
+padding: 120px 5vw;
+position: relative;
 }
-.hc-title{
-font-family:‘Bebas Neue’,sans-serif;
-font-size:1.1rem;letter-spacing:.1em;
-color:var(–chalk);
-text-align:center;padding:0 1rem;
+.reserva-inner {
+max-width: 1200px; margin: 0 auto;
+display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+align-items: center;
 }
-/* Glow orb on card */
-.hc-glow{
-position:absolute;
-width:150px;height:150px;
-border-radius:50%;
-background:radial-gradient(circle,rgba(155,48,255,.3),transparent 70%);
-bottom:-40px;right:-40px;
-filter:blur(20px);pointer-events:none;
+.reserva-left .section-tag { justify-content: flex-start; }
+.reserva-promise { margin-top: 40px; display: flex; flex-direction: column; gap: 20px; }
+.reserva-promise-item {
+display: flex; align-items: flex-start; gap: 16px;
 }
-
-/* ── METRICS BAR */
-.metrics-bar{
-position:relative;z-index:5;
-background:rgba(14,14,28,.7);
-border-top:1px solid var(–border2);
-border-bottom:1px solid var(–border2);
-backdrop-filter:blur(20px);
-padding:1.8rem 5%;
-display:flex;justify-content:center;gap:0;
+.reserva-promise-icon {
+width: 44px; height: 44px; flex-shrink: 0;
+display: flex; align-items: center; justify-content: center;
+background: rgba(123,47,255,0.1);
+border: 1px solid rgba(123,47,255,0.2);
+font-size: 20px;
 }
-.metric{
-text-align:center;
-padding:0 3.5rem;
-border-right:1px solid var(–border2);
+.reserva-promise-title { font-size: 13px; font-weight: 500; letter-spacing: 0.05em; margin-bottom: 4px; }
+.reserva-promise-text { font-size: 12px; color: var(–muted); line-height: 1.6; }
+.reserva-form {
+background: var(–glass);
+border: 1px solid var(–glass-border);
+backdrop-filter: blur(20px);
+padding: 48px;
+position: relative;
 }
-.metric:last-child{border-right:none}
-.metric-num{
-font-family:‘Bebas Neue’,sans-serif;
-font-size:2.4rem;letter-spacing:.05em;
-background:linear-gradient(135deg,var(–gold2),var(–neon2));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-display:block;line-height:1;
+.reserva-form::before {
+content: ‘’;
+position: absolute; inset: 0;
+background: radial-gradient(ellipse at 80% 0%, rgba(224,64,251,0.08), transparent 60%);
+pointer-events: none;
 }
-.metric-label{
-font-size:.63rem;letter-spacing:.3em;text-transform:uppercase;
-color:rgba(237,233,245,.4);margin-top:.35rem;
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { position: relative; margin-bottom: 16px; }
+.form-group label {
+display: block;
+font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+color: var(–muted); margin-bottom: 8px;
 }
-
-/* ── SECTION COMMONS */
-section{position:relative;z-index:2}
-.sec-wrap{max-width:1200px;margin:0 auto;padding:0 5%}
-.sec-tag{
-display:inline-flex;align-items:center;gap:.8rem;
-font-size:.63rem;letter-spacing:.5em;text-transform:uppercase;
-color:var(–neon2);margin-bottom:1rem;
+.form-group input, .form-group select {
+width: 100%; padding: 14px 16px;
+background: rgba(255,255,255,0.04);
+border: 1px solid rgba(255,255,255,0.08);
+color: var(–text);
+font-family: var(–font-body); font-size: 14px;
+outline: none; transition: all 0.3s;
+appearance: none; -webkit-appearance: none;
 }
-.sec-tag::before{content:’’;width:24px;height:1px;background:var(–neon2)}
-.sec-title{
-font-family:‘Bebas Neue’,sans-serif;
-font-size:clamp(2.5rem,5vw,4.5rem);
-line-height:.95;letter-spacing:.02em;
-margin-bottom:1.8rem;
+.form-group input:focus, .form-group select:focus {
+border-color: var(–violet);
+background: rgba(123,47,255,0.05);
+box-shadow: 0 0 20px rgba(123,47,255,0.15);
 }
-.sec-title .accent{
-background:linear-gradient(120deg,var(–gold),var(–neon2));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+.form-group input::placeholder { color: rgba(232,224,240,0.25); }
+.form-group select option { background: #1a0a2e; color: var(–text); }
+.btn-reservar {
+width: 100%; padding: 18px;
+background: linear-gradient(135deg, var(–violet), var(–pink));
+color: #fff;
+font-family: var(–font-display);
+font-size: 18px; letter-spacing: 0.15em;
+border: none; cursor: pointer;
+clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+margin-top: 8px; position: relative; overflow: hidden;
+transition: all 0.3s;
+animation: glowPulse 2.5s ease-in-out infinite;
 }
-.sec-body{
-font-size:1rem;color:rgba(237,233,245,.6);
-line-height:1.85;font-weight:300;
-}
-
-/* ── SOBRE */
-#sobre{padding:130px 0}
-.sobre-layout{
-display:grid;
-grid-template-columns:1fr 1.1fr;
-gap:100px;align-items:center;
-}
-/* Left: big editorial text + visual */
-.sobre-visual-col{position:relative}
-.sobre-big-letter{
-font-family:‘Bebas Neue’,sans-serif;
-font-size:clamp(8rem,18vw,18rem);
-line-height:.8;
--webkit-text-stroke:1px rgba(155,48,255,.2);
--webkit-text-fill-color:transparent;
-position:absolute;top:-20px;left:-20px;
-pointer-events:none;user-select:none;
-z-index:0;
-}
-.sobre-card-main{
-position:relative;z-index:1;
-background:linear-gradient(145deg,rgba(26,10,46,.8),rgba(14,14,28,.9));
-border:1px solid var(–border);
-border-radius:8px;padding:3rem;
-backdrop-filter:blur(12px);
-overflow:hidden;
-}
-.sobre-card-main::before{
-content:’’;position:absolute;top:0;left:0;right:0;height:2px;
-background:linear-gradient(90deg,var(–violet),var(–neon2),var(–gold));
-}
-.sobre-mood-grid{
-display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem;
-}
-.mood-chip{
-background:var(–glass2);
-border:1px solid var(–border2);
-border-radius:6px;padding:1.2rem;
-text-align:center;
-transition:all .35s;cursor:none;
-}
-.mood-chip:hover{
-border-color:rgba(155,48,255,.4);
-background:rgba(155,48,255,.08);
-transform:translateY(-3px);
-box-shadow:0 10px 30px rgba(155,48,255,.1);
-}
-.mood-emoji{font-size:1.8rem;display:block;margin-bottom:.5rem}
-.mood-txt{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(237,233,245,.55)}
-
-.sobre-text-col{}
-.sobre-quote{
-font-family:‘Playfair Display’,serif;
-font-style:italic;
-font-size:clamp(1.2rem,2.5vw,1.7rem);
-color:var(–chalk);line-height:1.5;
-margin-bottom:2rem;
-position:relative;padding-left:1.5rem;
-}
-.sobre-quote::before{
-content:’’;
-position:absolute;left:0;top:.2em;bottom:.2em;
-width:2px;
-background:linear-gradient(var(–neon),var(–gold));
-}
-.sobre-text-col .sec-body{margin-bottom:1.5rem}
-.sobre-detail{
-display:flex;align-items:center;gap:.8rem;
-font-size:.75rem;letter-spacing:.1em;color:rgba(237,233,245,.5);
-margin-top:.4rem;
-}
-.sobre-detail::before{content:‘◆’;color:var(–neon);font-size:.5rem}
-
-/* ── EXPERIENCIA */
-#experiencia{padding:130px 0;background:linear-gradient(180deg,rgba(155,48,255,.03) 0%,transparent 100%)}
-.exp-header{max-width:640px;margin-bottom:5rem}
-.exp-grid{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:1.5px;
-background:var(–border2);
-border:1px solid var(–border2);
-border-radius:8px;overflow:hidden;
-}
-.exp-item{
-background:var(–ink2);
-padding:2.5rem 1.5rem;
-text-align:center;
-transition:all .4s cubic-bezier(.4,0,.2,1);
-cursor:none;position:relative;overflow:hidden;
-}
-.exp-item::after{
-content:’’;position:absolute;inset:0;
-background:linear-gradient(160deg,rgba(155,48,255,.12),rgba(168,216,240,.06));
-opacity:0;transition:opacity .4s;
-}
-.exp-item:hover{background:rgba(26,10,46,.8)}
-.exp-item:hover::after{opacity:1}
-.exp-item:hover .exp-em{transform:translateY(-6px) scale(1.15);filter:drop-shadow(0 0 16px rgba(155,48,255,.7))}
-.exp-em{
-font-size:2.5rem;display:block;margin-bottom:1.2rem;
-transition:transform .4s,filter .4s;
-filter:drop-shadow(0 0 6px rgba(155,48,255,.2));
-}
-.exp-name{
-font-family:‘Bebas Neue’,sans-serif;
-font-size:1.1rem;letter-spacing:.08em;color:var(–chalk);
-display:block;margin-bottom:.5rem;
-position:relative;z-index:1;
-}
-.exp-desc{font-size:.75rem;color:rgba(237,233,245,.42);line-height:1.6;position:relative;z-index:1}
-.exp-line{
-position:absolute;bottom:0;left:0;right:0;height:2px;
-background:linear-gradient(90deg,var(–violet),var(–neon2));
-transform:scaleX(0);transform-origin:left;
-transition:transform .4s;
-}
-.exp-item:hover .exp-line{transform:scaleX(1)}
-
-/* ── GALERIA */
-#galeria{padding:130px 0}
-.gal-header{
-display:flex;justify-content:space-between;align-items:flex-end;
-margin-bottom:3rem;
-}
-.gal-grid{
-display:grid;
-grid-template-columns:repeat(12,1fr);
-grid-template-rows:auto;
-gap:8px;
-}
-/* Mosaic layout */
-.gp{
-position:relative;overflow:hidden;border-radius:4px;
-cursor:none;
-}
-.gp1{grid-column:span 7;grid-row:span 2;aspect-ratio:auto}
-.gp2{grid-column:span 5;aspect-ratio:16/9}
-.gp3{grid-column:span 5}
-.gp4{grid-column:span 4}
-.gp5{grid-column:span 4}
-.gp6{grid-column:span 4}
-
-.gp-inner{
-width:100%;height:100%;min-height:220px;
-transition:transform .7s cubic-bezier(.4,0,.2,1),filter .5s;
-position:relative;display:flex;align-items:center;justify-content:center;
-}
-.gp:hover .gp-inner{transform:scale(1.05)}
-
-/* Unique gradient for each */
-.gpc1{background:radial-gradient(ellipse at 35% 55%,rgba(106,13,173,.85),rgba(4,4,10,.97)),repeating-linear-gradient(30deg,rgba(155,48,255,.05) 0,rgba(155,48,255,.05) 1px,transparent 1px,transparent 35px)}
-.gpc2{background:radial-gradient(ellipse at 65% 35%,rgba(168,216,240,.3),rgba(4,4,10,.97)),radial-gradient(ellipse at 10% 80%,rgba(155,48,255,.25),transparent 60%)}
-.gpc3{background:radial-gradient(ellipse at 50% 50%,rgba(212,168,67,.35),rgba(4,4,10,.97))}
-.gpc4{background:radial-gradient(ellipse at 40% 60%,rgba(255,107,43,.25),rgba(4,4,10,.97))}
-.gpc5{background:radial-gradient(ellipse at 60% 40%,rgba(155,48,255,.45),rgba(4,4,10,.97)),linear-gradient(45deg,rgba(168,216,240,.1),transparent)}
-.gpc6{background:radial-gradient(ellipse at 30% 70%,rgba(106,13,173,.6),rgba(4,4,10,.97)),radial-gradient(ellipse at 80% 20%,rgba(212,168,67,.2),transparent)}
-
-.gp-overlay{
-position:absolute;inset:0;
-background:linear-gradient(160deg,rgba(155,48,255,.6),rgba(4,4,10,.5));
-opacity:0;transition:opacity .45s;
-display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;
-}
-.gp:hover .gp-overlay{opacity:1}
-.gp-ol-icon{font-size:1.8rem}
-.gp-ol-txt{font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.8)}
-
-.gp-scene{
-position:absolute;bottom:0;left:0;right:0;
-padding:1rem 1.2rem;
-background:linear-gradient(transparent,rgba(4,4,10,.9));
-}
-.gp-scene-l{font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;color:rgba(237,233,245,.4)}
-.gp-scene-t{
-font-family:‘Bebas Neue’,sans-serif;
-font-size:1.1rem;letter-spacing:.08em;color:var(–chalk);
-text-shadow:0 0 20px rgba(155,48,255,.4);
-}
-.gp-big-icon{
-font-size:5rem;
-filter:drop-shadow(0 0 30px rgba(155,48,255,.4));
-transition:filter .5s;
-}
-.gp:hover .gp-big-icon{filter:drop-shadow(0 0 40px rgba(155,48,255,.8))}
-/* smaller items */
-.gp4 .gp-big-icon,.gp5 .gp-big-icon,.gp6 .gp-big-icon{font-size:3rem}
-
-/* Border glow on hover */
-.gp::before{
-content:’’;position:absolute;inset:0;border-radius:4px;
-border:1px solid transparent;
-transition:border-color .4s,box-shadow .4s;z-index:3;pointer-events:none;
-}
-.gp:hover::before{
-border-color:rgba(155,48,255,.5);
-box-shadow:inset 0 0 30px rgba(155,48,255,.06);
+.btn-reservar:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(224,64,251,0.5); }
+.reserva-note {
+text-align: center; margin-top: 16px;
+font-size: 11px; color: var(–muted); letter-spacing: 0.1em;
 }
 
-/* Lightbox */
-.lb{
-display:none;position:fixed;inset:0;
-background:rgba(4,4,10,.95);backdrop-filter:blur(24px);
-z-index:9999;align-items:center;justify-content:center;
+/* ─── CONTATO ─── */
+#contato { padding: 120px 5vw; }
+.contato-grid {
+display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+max-width: 1300px; margin: 0 auto; align-items: start;
 }
-.lb.on{display:flex}
-.lb-box{
-position:relative;max-width:600px;width:90%;
-border-radius:8px;overflow:hidden;
-border:1px solid var(–border);
-box-shadow:0 0 80px rgba(155,48,255,.3);
+.contato-info { display: flex; flex-direction: column; gap: 32px; }
+.contato-item {
+display: flex; align-items: flex-start; gap: 20px;
+background: var(–glass);
+border: 1px solid var(–glass-border);
+backdrop-filter: blur(10px);
+padding: 28px;
+transition: all 0.3s;
 }
-.lb-content{
-min-height:420px;display:flex;flex-direction:column;
-align-items:center;justify-content:center;gap:1.5rem;
-padding:4rem 3rem;
-background:linear-gradient(145deg,rgba(26,10,46,.95),var(–ink2));
+.contato-item:hover { border-color: rgba(123,47,255,0.3); box-shadow: 0 0 20px rgba(123,47,255,0.1); }
+.contato-icon {
+width: 48px; height: 48px; flex-shrink: 0;
+display: flex; align-items: center; justify-content: center;
+background: linear-gradient(135deg, rgba(123,47,255,0.2), rgba(224,64,251,0.1));
+border: 1px solid rgba(123,47,255,0.2);
+font-size: 20px;
 }
-.lb-close{
-position:absolute;top:1rem;right:1rem;
-width:34px;height:34px;border-radius:50%;
-background:var(–glass2);border:1px solid var(–border2);
-color:var(–chalk);font-size:.9rem;
-display:flex;align-items:center;justify-content:center;
-cursor:none;transition:all .3s;
+.contato-label { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(–violet); margin-bottom: 6px; }
+.contato-value { font-size: 16px; color: var(–text); }
+.contato-sub { font-size: 12px; color: var(–muted); margin-top: 4px; }
+.contato-map {
+background: var(–glass);
+border: 1px solid var(–glass-border);
+height: 400px;
+display: flex; align-items: center; justify-content: center;
+position: relative; overflow: hidden;
+backdrop-filter: blur(10px);
 }
-.lb-close:hover{border-color:var(–neon);box-shadow:0 0 15px rgba(155,48,255,.3)}
-.lb-icon{font-size:5rem;filter:drop-shadow(0 0 30px rgba(155,48,255,.6))}
-.lb-title{
-font-family:‘Bebas Neue’,sans-serif;
-font-size:2rem;letter-spacing:.08em;color:var(–chalk);
+.map-placeholder {
+text-align: center; padding: 40px;
+position: relative; z-index: 1;
 }
-.lb-desc{text-align:center;color:rgba(237,233,245,.65);font-size:.9rem;line-height:1.8;max-width:380px}
+.map-grid {
+position: absolute; inset: 0;
+background-image:
+linear-gradient(rgba(123,47,255,0.06) 1px, transparent 1px),
+linear-gradient(90deg, rgba(123,47,255,0.06) 1px, transparent 1px);
+background-size: 40px 40px;
+}
+.map-pin {
+font-size: 48px; margin-bottom: 16px;
+animation: pinBounce 2s ease-in-out infinite;
+}
+@keyframes pinBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.map-name { font-family: var(–font-display); font-size: 24px; letter-spacing: 0.1em; margin-bottom: 8px; }
+.map-address { font-size: 14px; color: var(–muted); margin-bottom: 20px; }
+.btn-maps {
+display: inline-flex; align-items: center; gap: 8px;
+padding: 12px 28px;
+background: rgba(123,47,255,0.2);
+border: 1px solid rgba(123,47,255,0.3);
+color: var(–text); text-decoration: none;
+font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+transition: all 0.3s;
+}
+.btn-maps:hover { background: var(–violet); border-color: var(–violet); box-shadow: 0 0 20px rgba(123,47,255,0.4); }
+.contato-social { display: flex; gap: 12px; }
+.social-link {
+width: 44px; height: 44px;
+display: flex; align-items: center; justify-content: center;
+background: rgba(255,255,255,0.04);
+border: 1px solid var(–glass-border);
+font-size: 18px; text-decoration: none;
+transition: all 0.3s;
+}
+.social-link:hover { background: var(–violet); border-color: var(–violet); box-shadow: 0 0 20px rgba(123,47,255,0.4); transform: translateY(-2px); }
 
-/* ── AVALIAÇÕES */
-#avaliacoes{
-padding:130px 0;
-background:
-radial-gradient(ellipse 60% 50% at 100% 50%,rgba(155,48,255,.06),transparent),
-radial-gradient(ellipse 50% 40% at 0% 60%,rgba(168,216,240,.04),transparent);
+/* ─── FOOTER ─── */
+footer {
+border-top: 1px solid var(–glass-border);
+padding: 60px 5vw 40px;
+text-align: center;
+position: relative;
 }
-.av-header{
-display:flex;justify-content:space-between;align-items:flex-end;
-margin-bottom:4rem;
+footer::before {
+content: ‘’;
+position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+width: 200px; height: 1px;
+background: linear-gradient(90deg, transparent, var(–violet), transparent);
 }
-.av-rating-big{text-align:right}
-.av-number{
-font-family:‘Bebas Neue’,sans-serif;font-size:5rem;line-height:.9;
-background:linear-gradient(135deg,var(–gold),var(–gold2));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+.footer-logo {
+font-family: var(–font-display);
+font-size: 40px; letter-spacing: 0.1em;
+background: linear-gradient(135deg, var(–violet), var(–pink));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+display: block; margin-bottom: 16px;
 }
-.av-stars{font-size:1.1rem;color:var(–gold);letter-spacing:.1em}
-.av-label{font-size:.63rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(237,233,245,.4);margin-top:.3rem}
+.footer-tagline {
+font-family: var(–font-serif);
+font-style: italic; font-weight: 300; font-size: 16px;
+color: var(–muted); margin-bottom: 40px;
+}
+.footer-links { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin-bottom: 40px; }
+.footer-links a {
+font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+color: var(–muted); text-decoration: none; transition: color 0.3s;
+}
+.footer-links a:hover { color: var(–violet); }
+.footer-copy { font-size: 11px; color: rgba(232,224,240,0.2); letter-spacing: 0.1em; }
 
-.av-track-wrap{overflow:hidden;position:relative}
-.av-track{display:flex;gap:1.5rem;transition:transform .6s cubic-bezier(.4,0,.2,1)}
-.av-card{
-min-width:360px;
-background:var(–glass2);
-border:1px solid var(–border2);
-border-radius:8px;padding:2.2rem;
-backdrop-filter:blur(16px);
-flex-shrink:0;
-transition:all .4s;position:relative;overflow:hidden;cursor:none;
+/* ─── FLOATING WA ─── */
+#wa-float {
+position: fixed; bottom: 32px; right: 32px; z-index: 1000;
+width: 60px; height: 60px;
+background: linear-gradient(135deg, #25d366, #128c7e);
+border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+font-size: 28px; text-decoration: none;
+box-shadow: 0 8px 32px rgba(37,211,102,0.35);
+animation: waPulse 2s ease-in-out infinite;
+transition: transform 0.3s;
 }
-.av-card::before{
-content:’’;position:absolute;top:0;left:0;right:0;height:1px;
-background:linear-gradient(90deg,transparent,var(–neon2),transparent);
-opacity:0;transition:opacity .4s;
-}
-.av-card:hover{border-color:rgba(155,48,255,.3);transform:translateY(-4px)}
-.av-card:hover::before{opacity:1}
-.av-card::after{
-content:’\201C’;
-position:absolute;top:-.8rem;right:1.2rem;
-font-size:6rem;font-family:‘DM Serif Display’,serif;
-color:var(–violet);opacity:.2;line-height:1;
-pointer-events:none;
-}
-.av-stars2{font-size:.85rem;color:var(–gold);margin-bottom:1.2rem;letter-spacing:.1em}
-.av-text{
-font-family:‘DM Serif Display’,serif;font-style:italic;
-font-size:1.05rem;color:rgba(237,233,245,.85);
-line-height:1.7;margin-bottom:1.8rem;font-weight:400;
-}
-.av-author{display:flex;align-items:center;gap:.9rem}
-.av-avatar{
-width:42px;height:42px;border-radius:50%;
-background:linear-gradient(135deg,var(–violet),var(–neon));
-border:1px solid var(–border);
-display:flex;align-items:center;justify-content:center;
-font-size:1.2rem;
-}
-.av-name{font-size:.82rem;font-weight:600;color:var(–chalk)}
-.av-meta{font-size:.65rem;color:rgba(237,233,245,.38);margin-top:.2rem;letter-spacing:.1em}
-
-.av-controls{display:flex;justify-content:flex-end;gap:.7rem;margin-top:2rem;align-items:center}
-.av-btn{
-width:40px;height:40px;border-radius:50%;
-border:1px solid var(–border2);background:var(–glass2);
-color:var(–chalk);font-size:1rem;
-display:flex;align-items:center;justify-content:center;
-cursor:none;transition:all .3s;backdrop-filter:blur(8px);
-}
-.av-btn:hover{border-color:var(–neon);box-shadow:0 0 20px rgba(155,48,255,.3)}
-.av-dots{display:flex;gap:.4rem;margin-right:auto}
-.av-dot{
-width:6px;height:6px;border-radius:3px;
-background:rgba(237,233,245,.2);cursor:none;transition:all .3s;
-}
-.av-dot.on{width:22px;background:var(–neon);box-shadow:0 0 10px rgba(155,48,255,.5)}
-
-/* ── RESERVA */
-#reserva{padding:130px 0}
-.reserva-layout{
-display:grid;grid-template-columns:1fr 1.1fr;gap:80px;align-items:center;
-}
-.reserva-left .sec-title{font-size:clamp(2rem,4vw,3.5rem)}
-.reserva-why{
-margin-top:2.5rem;
-display:flex;flex-direction:column;gap:.8rem;
-}
-.why-item{
-display:flex;align-items:center;gap:.8rem;
-font-size:.82rem;color:rgba(237,233,245,.65);
-}
-.why-dot{
-width:6px;height:6px;border-radius:50%;flex-shrink:0;
-background:linear-gradient(var(–neon),var(–gold));
-box-shadow:0 0 8px rgba(155,48,255,.5);
+#wa-float:hover { transform: scale(1.1); }
+@keyframes waPulse {
+0%,100%{ box-shadow:0 8px 32px rgba(37,211,102,0.35), 0 0 0 0 rgba(37,211,102,0.3) }
+50%{ box-shadow:0 8px 32px rgba(37,211,102,0.5), 0 0 0 16px rgba(37,211,102,0) }
 }
 
-.form-box{
-background:linear-gradient(145deg,rgba(26,10,46,.7),rgba(14,14,28,.9));
-border:1px solid var(–border);
-border-radius:10px;padding:2.5rem;
-position:relative;overflow:hidden;
-backdrop-filter:blur(20px);
+/* ─── BACK TO TOP ─── */
+#back-top {
+position: fixed; bottom: 104px; right: 36px; z-index: 1000;
+width: 44px; height: 44px;
+background: var(–glass);
+border: 1px solid var(–glass-border);
+backdrop-filter: blur(10px);
+color: var(–text); font-size: 20px;
+display: flex; align-items: center; justify-content: center;
+text-decoration: none; cursor: pointer;
+transition: all 0.3s; opacity: 0; pointer-events: none;
 }
-.form-box::before{
-content:’’;position:absolute;top:-1px;left:-1px;right:-1px;height:2px;
-background:linear-gradient(90deg,var(–violet),var(–neon2),var(–gold));
-border-radius:10px 10px 0 0;
-}
-.form-box-glow{
-position:absolute;width:300px;height:300px;border-radius:50%;
-background:radial-gradient(circle,rgba(155,48,255,.12),transparent 70%);
-top:-150px;right:-150px;pointer-events:none;
-}
-.f-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.f-group{margin-bottom:1.1rem}
-.f-label{
-display:block;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;
-color:rgba(237,233,245,.4);margin-bottom:.45rem;font-weight:600;
-}
-.f-input{
-width:100%;
-background:rgba(255,255,255,.04);
-border:1px solid var(–border2);
-border-radius:4px;
-padding:.8rem 1rem;
-color:var(–chalk);
-font-family:‘Outfit’,sans-serif;font-size:.88rem;
-outline:none;cursor:none;
-transition:border-color .3s,background .3s,box-shadow .3s;
-}
-.f-input:focus{
-border-color:var(–neon);
-background:rgba(155,48,255,.06);
-box-shadow:0 0 0 3px rgba(155,48,255,.12);
-}
-.f-input::placeholder{color:rgba(237,233,245,.2)}
-.f-input option{background:var(–smoke);color:var(–chalk)}
+#back-top.visible { opacity: 1; pointer-events: all; }
+#back-top:hover { background: var(–violet); border-color: var(–violet); box-shadow: 0 0 20px rgba(123,47,255,0.4); }
 
-.f-submit{
-width:100%;margin-top:.5rem;
-background:linear-gradient(135deg,var(–violet),var(–neon));
-border:1px solid var(–neon);
-border-radius:4px;
-padding:1.05rem;
-font-family:‘Outfit’,sans-serif;
-font-size:.82rem;letter-spacing:.25em;text-transform:uppercase;font-weight:700;
-color:var(–chalk);cursor:none;
-display:flex;align-items:center;justify-content:center;gap:.7rem;
-position:relative;overflow:hidden;
-box-shadow:0 0 30px rgba(155,48,255,.25);
-transition:box-shadow .3s,transform .25s;
+/* ─── SMOKE EFFECT ─── */
+.smoke {
+position: absolute; pointer-events: none;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(123,47,255,0.08) 0%, transparent 70%);
+animation: smokeRise 6s ease-out infinite;
+filter: blur(20px);
 }
-.f-submit::after{
-content:’’;position:absolute;
-top:-50%;left:-60%;width:35%;height:200%;
-background:rgba(255,255,255,.1);
-transform:skewX(-20deg);
-transition:left .5s;
-}
-.f-submit:hover{
-box-shadow:0 0 60px rgba(155,48,255,.55),0 0 100px rgba(155,48,255,.2);
-transform:translateY(-2px);
-}
-.f-submit:hover::after{left:130%}
-.f-note{
-text-align:center;font-size:.68rem;
-color:rgba(237,233,245,.3);margin-top:.8rem;letter-spacing:.08em;
-}
-.f-wpp{color:#25d366;font-weight:600}
-
-/* ── CONTATO */
-#contato{
-padding:130px 0;
-border-top:1px solid var(–border2);
-}
-.contato-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:80px;align-items:start}
-.ctt-items{margin-top:2rem;display:flex;flex-direction:column;gap:.8rem}
-.ctt-item{
-display:flex;align-items:flex-start;gap:1rem;
-background:var(–glass);border:1px solid var(–border2);
-border-radius:6px;padding:1.3rem 1.5rem;
-transition:all .35s;cursor:none;
-}
-.ctt-item:hover{border-color:rgba(155,48,255,.35);transform:translateX(4px);background:rgba(155,48,255,.06)}
-.ctt-ico{font-size:1.4rem;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(155,48,255,.4))}
-.ctt-lbl{font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(–neon2);margin-bottom:.3rem}
-.ctt-val{font-size:.88rem;color:rgba(237,233,245,.75);line-height:1.6}
-.ctt-val a{color:inherit;text-decoration:none;transition:color .3s}
-.ctt-val a:hover{color:var(–ice)}
-
-.map-box{
-border-radius:8px;overflow:hidden;
-border:1px solid var(–border);
-position:relative;aspect-ratio:4/3;
-}
-.map-box iframe{
-width:100%;height:100%;border:none;display:block;
-filter:grayscale(.9) invert(1) hue-rotate(180deg) brightness(.65) contrast(1.1);
-}
-.map-cta{
-display:inline-flex;align-items:center;gap:.5rem;
-margin-top:1rem;
-color:var(–ice);text-decoration:none;
-font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;
-border:1px solid rgba(168,216,240,.25);
-padding:.55rem 1.2rem;border-radius:3px;
-transition:all .3s;cursor:none;
-}
-.map-cta:hover{background:rgba(168,216,240,.08);box-shadow:0 0 20px rgba(168,216,240,.15)}
-
-/* ── FOOTER */
-footer{
-padding:3rem 0 2.5rem;
-border-top:1px solid var(–border2);
-position:relative;z-index:2;
-}
-.footer-inner{
-max-width:1200px;margin:0 auto;padding:0 5%;
-display:flex;flex-direction:column;align-items:center;gap:1.5rem;
-}
-.footer-logo{
-font-family:‘Bebas Neue’,sans-serif;
-font-size:2rem;letter-spacing:.2em;
-background:linear-gradient(135deg,var(–gold),var(–neon2));
--webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.footer-phrase{
-font-family:‘DM Serif Display’,serif;font-style:italic;
-font-size:1rem;color:rgba(237,233,245,.35);
-}
-.footer-socials{display:flex;gap:.8rem}
-.f-soc{
-width:38px;height:38px;border-radius:50%;
-border:1px solid var(–border2);background:var(–glass);
-display:flex;align-items:center;justify-content:center;
-font-size:.85rem;color:rgba(237,233,245,.5);
-text-decoration:none;cursor:none;transition:all .3s;
-backdrop-filter:blur(8px);
-}
-.f-soc:hover{border-color:var(–neon);color:var(–chalk);box-shadow:0 0 15px rgba(155,48,255,.3);transform:translateY(-2px)}
-.footer-copy{font-size:.65rem;color:rgba(237,233,245,.2);letter-spacing:.18em;text-align:center}
-
-/* ── FLOATING ELEMENTS */
-.wpp-fab{
-position:fixed;bottom:2rem;right:2rem;z-index:800;
-width:56px;height:56px;border-radius:50%;
-background:#25d366;
-display:flex;align-items:center;justify-content:center;
-font-size:1.5rem;text-decoration:none;cursor:none;
-box-shadow:0 4px 20px rgba(37,211,102,.4);
-transition:transform .3s,box-shadow .3s;
-animation:wppBeat 3s ease-in-out infinite;
-}
-@keyframes wppBeat{
-0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.4)}
-50%{box-shadow:0 4px 40px rgba(37,211,102,.7),0 0 0 10px rgba(37,211,102,.06)}
-}
-.wpp-fab:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 8px 30px rgba(37,211,102,.6)}
-
-.btt{
-position:fixed;bottom:2rem;left:2rem;z-index:800;
-width:42px;height:42px;border-radius:50%;
-border:1px solid var(–border2);background:var(–glass2);
-color:var(–chalk);font-size:.9rem;
-display:flex;align-items:center;justify-content:center;
-text-decoration:none;cursor:none;
-opacity:0;pointer-events:none;
-transition:opacity .3s,transform .3s,border-color .3s,box-shadow .3s;
-backdrop-filter:blur(8px);
-}
-.btt.show{opacity:1;pointer-events:all}
-.btt:hover{border-color:var(–neon);box-shadow:0 0 20px rgba(155,48,255,.3);transform:translateY(-2px)}
-
-.music-btn{
-position:fixed;top:82px;right:1.2rem;z-index:800;
-width:38px;height:38px;border-radius:50%;
-border:1px solid var(–border2);background:rgba(4,4,10,.7);
-color:rgba(237,233,245,.5);font-size:.8rem;
-display:flex;align-items:center;justify-content:center;
-cursor:none;transition:all .3s;backdrop-filter:blur(8px);
-}
-.music-btn.on{border-color:var(–neon);color:var(–neon);box-shadow:0 0 15px rgba(155,48,255,.3)}
-
-/* Divider */
-.div-line{
-height:1px;
-background:linear-gradient(90deg,transparent,rgba(155,48,255,.25),transparent);
-position:relative;z-index:2;
-}
-.div-line::after{
-content:‘◆’;
-position:absolute;top:50%;left:50%;
-transform:translate(-50%,-50%);
-color:var(–neon);font-size:.5rem;
-text-shadow:0 0 10px var(–neon);
-background:var(–ink);padding:0 .5rem;
+@keyframes smokeRise {
+0%{ opacity:0.8; transform:translateY(0) scale(0.5); }
+100%{ opacity:0; transform:translateY(-200px) scale(2); }
 }
 
-/* ── RESPONSIVE */
-@media(max-width:1024px){
-.hero-inner{grid-template-columns:1fr;gap:40px}
-.hero-right{height:320px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.hc1,.hc2,.hc3{position:static;width:auto;height:auto;aspect-ratio:3/4}
-.sobre-layout{grid-template-columns:1fr;gap:60px}
-.exp-grid{grid-template-columns:repeat(3,1fr)}
-.reserva-layout{grid-template-columns:1fr;gap:50px}
-.contato-grid{grid-template-columns:1fr;gap:50px}
-.gal-grid{grid-template-columns:repeat(6,1fr)}
-.gp1{grid-column:span 6}
-.gp2{grid-column:span 3}
-.gp3{grid-column:span 3}
-.gp4,.gp5,.gp6{grid-column:span 2}
-.av-card{min-width:300px}
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+#sobre { grid-template-columns: 1fr; gap: 40px; }
+.reserva-inner { grid-template-columns: 1fr; }
+.contato-grid { grid-template-columns: 1fr; }
+.nav-links { display: none; }
+.nav-cta { display: none; }
+.hamburger { display: flex; }
+.gallery-grid {
+grid-template-columns: 1fr 1fr;
+grid-template-rows: auto;
 }
-@media(max-width:768px){
-.nav-links{display:none}
-.nav-cta{display:none}
-.burger{display:flex}
-.metrics-bar{flex-wrap:wrap;gap:0}
-.metric{padding:1rem 1.5rem;flex:1 0 50%;border-right:none;border-bottom:1px solid var(–border2)}
-.exp-grid{grid-template-columns:repeat(2,1fr)}
-.gp2,.gp3{grid-column:span 6}
-.gp4,.gp5,.gp6{grid-column:span 3}
-.av-card{min-width:280px}
-.gal-header{flex-direction:column;align-items:flex-start;gap:1.5rem}
-.av-header{flex-direction:column;align-items:flex-start;gap:1.5rem}
-.av-rating-big{text-align:left}
-.f-row{grid-template-columns:1fr}
-.sobre-big-letter{font-size:8rem}
+.gallery-item { grid-column: auto!important; grid-row: auto!important; height: 200px; }
+.hero-stats { gap: 24px; }
+.form-row { grid-template-columns: 1fr; }
 }
-@media(max-width:480px){
-.exp-grid{grid-template-columns:1fr 1fr}
-.gal-grid{grid-template-columns:1fr 1fr}
-.gp1,.gp2,.gp3{grid-column:span 2}
-.gp4,.gp5,.gp6{grid-column:span 1}
+@media(max-width:600px){
+.hero-title { font-size: 52px; }
+.gallery-grid { grid-template-columns: 1fr; }
+.gallery-item { height: 220px; }
+.reserva-form { padding: 28px 20px; }
 }
 </style>
 
@@ -1001,46 +939,26 @@ background:var(–ink);padding:0 .5rem;
 
 <!-- CURSOR -->
 
-<div id="cur"></div>
-<div id="cur-ring"></div>
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+
+<!-- PARTICLES -->
+
+<canvas id="particles-canvas"></canvas>
 
 <!-- LOADER -->
 
 <div id="loader">
-  <div class="ld-wordmark" id="ldw">DLEVIS</div>
-  <div class="ld-bar-wrap"><div class="ld-bar" id="ldBar"></div></div>
-  <div class="ld-sub" id="ldSub">Lounge &amp; Bar · Pinhais</div>
+  <div class="loader-logo">DLEVIS</div>
+  <div class="loader-bar"></div>
+  <div class="loader-text">Preparando sua experiência</div>
 </div>
-
-<!-- NOISE OVERLAY -->
-
-<div class="noise"></div>
-
-<!-- BG CANVAS -->
-
-<canvas id="bg-canvas"></canvas>
-
-<!-- MUSIC -->
-
-<button class="music-btn" id="musicBtn" title="Música">♪</button>
-
-<!-- WHATSAPP FAB -->
-
-<a href="https://wa.me/5541995459915" target="_blank" class="wpp-fab" title="WhatsApp">💬</a>
-
-<!-- BACK TO TOP -->
-
-<a href="#hero" class="btt" id="btt">↑</a>
 
 <!-- NAV -->
 
-<nav id="nav">
-  <a href="#hero" class="nav-logo">
-    <span>DLEVIS</span>
-    <em>Lounge & Bar</em>
-  </a>
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">DLEVIS</a>
   <ul class="nav-links">
-    <li><a href="#hero">Início</a></li>
     <li><a href="#sobre">Sobre</a></li>
     <li><a href="#experiencia">Experiência</a></li>
     <li><a href="#galeria">Galeria</a></li>
@@ -1048,762 +966,532 @@ background:var(–ink);padding:0 .5rem;
     <li><a href="#contato">Contato</a></li>
     <li><a href="#reserva" class="nav-cta">Reservar Mesa</a></li>
   </ul>
-  <div class="burger" id="burger"><span></span><span></span><span></span></div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- MOBILE NAV -->
+<!-- MOBILE MENU -->
 
-<div class="mob-nav" id="mobNav">
-  <a href="#hero" onclick="closeMob()">Início</a>
-  <a href="#sobre" onclick="closeMob()">Sobre</a>
-  <a href="#experiencia" onclick="closeMob()">Experiência</a>
-  <a href="#galeria" onclick="closeMob()">Galeria</a>
-  <a href="#avaliacoes" onclick="closeMob()">Avaliações</a>
-  <a href="#contato" onclick="closeMob()">Contato</a>
-  <a href="#reserva" onclick="closeMob()" style="color:var(--neon2)">✦ Reservar Mesa</a>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#sobre" class="mm-link">Sobre</a>
+  <a href="#experiencia" class="mm-link">Experiência</a>
+  <a href="#galeria" class="mm-link">Galeria</a>
+  <a href="#avaliacoes" class="mm-link">Avaliações</a>
+  <a href="#contato" class="mm-link">Contato</a>
+  <a href="#reserva" class="mm-link">Reservar Mesa</a>
 </div>
 
-<!-- ══════════════ HERO ══════════════ -->
+<!-- HERO -->
 
 <section id="hero">
-  <div class="hero-bg-layer"></div>
+  <div class="hero-bg"></div>
   <div class="hero-grid"></div>
-  <div class="hero-stripe"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <!-- Smoke particles -->
+  <div class="smoke" style="width:200px;height:200px;bottom:10%;left:10%;animation-delay:0s"></div>
+  <div class="smoke" style="width:150px;height:150px;bottom:5%;left:30%;animation-delay:-2s"></div>
+  <div class="smoke" style="width:180px;height:180px;bottom:15%;right:15%;animation-delay:-4s"></div>
 
-  <div class="hero-inner">
-    <div class="hero-left">
-      <p class="hero-label" id="hlabel">Pinhais · Paraná · Est. 2024</p>
-      <h1 class="hero-h1" id="hh1">
-        <span class="line"><span class="hi" id="hw1">A MELHOR</span></span>
-        <span class="line"><span class="hi" id="hw2">EXPERIÊNCIA</span></span>
-        <span class="line"><span class="h2" id="hw3">NOTURNA</span></span>
-      </h1>
-      <p class="hero-sub" id="hsub">
-        Narguilé premium, drinks gelados e uma vibe<br>
-        que vai te fazer querer voltar toda semana.
-      </p>
-      <div class="hero-btns" id="hbtns">
-        <a href="#reserva" class="btn-glow">✦ Reservar Mesa</a>
-        <a href="#galeria" class="btn-outline">◎ Ver Ambiente</a>
-      </div>
-    </div>
-
-```
-<div class="hero-right" id="heroRight">
-  <div class="hero-card hc1">
-    <div class="hero-card-bg hcb1">
-      <div class="hc-glow"></div>
-      <span class="hc-icon">💨</span>
-      <span class="hc-badge">Destaque</span>
-      <span class="hc-title">Narguilé Premium</span>
+  <div class="hero-content">
+    <div class="hero-eyebrow" id="hero-eyebrow">✦ Pinhais · Paraná · Brasil ✦</div>
+    <h1 class="hero-title" id="hero-title">
+      <span class="outline-text">A Melhor</span><br>
+      <span class="glow-text">Experiência</span><br>
+      <span class="outline-text">Noturna</span>
+    </h1>
+    <p class="hero-subtitle" id="hero-subtitle">
+      Narguilé de qualidade, drinks autorais e um ambiente feito para noites que você vai querer repetir.
+    </p>
+    <div class="hero-actions" id="hero-actions">
+      <a href="#reserva" class="btn-primary"><span>✦ Reservar Mesa</span></a>
+      <a href="#galeria" class="btn-secondary">◎ Ver Ambiente</a>
     </div>
   </div>
-  <div class="hero-card hc2">
-    <div class="hero-card-bg hcb2">
-      <span class="hc-icon">🍸</span>
-      <span class="hc-badge">Bar</span>
-      <span class="hc-title">Drinks & Coquetéis</span>
+
+  <div class="hero-stats" id="hero-stats">
+    <div class="hero-stat">
+      <span class="hero-stat-number">5.0</span>
+      <span class="hero-stat-label">⭐ Google</span>
+    </div>
+    <div class="hero-stat" style="border-left:1px solid rgba(255,255,255,0.06);border-right:1px solid rgba(255,255,255,0.06);padding:0 60px">
+      <span class="hero-stat-number">02:30</span>
+      <span class="hero-stat-label">Até às 2h30</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-number">100%</span>
+      <span class="hero-stat-label">Satisfação</span>
     </div>
   </div>
-  <div class="hero-card hc3">
-    <div class="hero-card-bg hcb3">
-      <span class="hc-icon">🎶</span>
-      <span class="hc-title">Vibe</span>
-    </div>
-  </div>
-</div>
-```
 
-  </div>
-
-  <!-- Scroll hint -->
-
-  <div style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:5;display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0" id="scrollHint">
-    <span style="font-size:.6rem;letter-spacing:.45em;text-transform:uppercase;color:rgba(237,233,245,.3)">Scroll</span>
-    <div style="width:1px;height:48px;background:linear-gradient(var(--neon2),transparent);animation:spulse 2s ease-in-out infinite"></div>
+  <div class="hero-scroll" id="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>Scroll</span>
   </div>
 </section>
 
-<style>
-@keyframes spulse{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
-</style>
-
-<!-- ══════════ METRICS ══════════ -->
-
-<div class="metrics-bar" data-aos="fade-up">
-  <div class="metric">
-    <span class="metric-num">⭐ 5.0</span>
-    <span class="metric-label">Google Reviews</span>
-  </div>
-  <div class="metric">
-    <span class="metric-num">02:30</span>
-    <span class="metric-label">Funciona até</span>
-  </div>
-  <div class="metric">
-    <span class="metric-num">100%</span>
-    <span class="metric-label">Satisfação</span>
-  </div>
-  <div class="metric">
-    <span class="metric-num">#1</span>
-    <span class="metric-label">Lounge em Pinhais</span>
-  </div>
-</div>
-
-<div class="div-line"></div>
-
-<!-- ══════════ SOBRE ══════════ -->
+<!-- SOBRE -->
 
 <section id="sobre">
-  <div class="sec-wrap">
-    <div class="sobre-layout">
-      <!-- Visual col -->
-      <div class="sobre-visual-col" data-aos="fade-right" data-aos-duration="900">
-        <div class="sobre-big-letter">D</div>
-        <div class="sobre-card-main">
-          <p style="font-size:.65rem;letter-spacing:.45em;text-transform:uppercase;color:var(--neon2);margin-bottom:1.2rem">✦ O Espaço</p>
-          <p style="font-size:1.05rem;color:rgba(237,233,245,.75);line-height:1.85;font-weight:300">
-            Um refúgio noturno em Pinhais onde sofisticação encontra conforto. 
-            Cada detalhe pensado para criar uma experiência única — do primeiro narguilé 
-            ao último drink da noite.
-          </p>
-          <div class="sobre-mood-grid">
-            <div class="mood-chip">
-              <span class="mood-emoji">🛋️</span>
-              <span class="mood-txt">Confortável</span>
-            </div>
-            <div class="mood-chip">
-              <span class="mood-emoji">✨</span>
-              <span class="mood-txt">Sofisticado</span>
-            </div>
-            <div class="mood-chip">
-              <span class="mood-emoji">👫</span>
-              <span class="mood-txt">Social</span>
-            </div>
-            <div class="mood-chip">
-              <span class="mood-emoji">🌙</span>
-              <span class="mood-txt">Noturno</span>
-            </div>
-          </div>
-        </div>
+  <div class="sobre-visual" data-aos="fade-right" data-aos-duration="800">
+    <div class="sobre-frame">
+      <div class="sobre-big-number">D</div>
+      <div class="sobre-badge">✦ Desde 2024</div>
+      <div class="sobre-detail-number">Pinhais</div>
+      <div class="sobre-detail-label">O melhor lounge da região</div>
+      <div class="sobre-dots">
+        <div class="sobre-dot active"></div><div class="sobre-dot active"></div>
+        <div class="sobre-dot active"></div><div class="sobre-dot"></div>
+        <div class="sobre-dot"></div><div class="sobre-dot"></div>
       </div>
-
-```
-  <!-- Text col -->
-  <div class="sobre-text-col" data-aos="fade-left" data-aos-duration="900" data-aos-delay="100">
-    <p class="sec-tag">Nossa história</p>
-    <h2 class="sec-title">Um Lugar Criado<br>para <span class="accent">Momentos</span></h2>
-    <blockquote class="sobre-quote">
-      "Não viemos só tomar uma bebida. Viemos sentir algo diferente."
-    </blockquote>
-    <p class="sec-body">
-      O <strong style="color:var(--chalk)">Espaço Dlevis</strong> nasceu com um propósito claro: ser 
-      <em style="color:var(--neon2)">o lugar</em> onde você cria memórias. Um ambiente cuidadosamente 
-      pensado, onde cada visita parece nova.
-    </p>
-    <p class="sec-body" style="margin-top:1rem">
-      Seja em uma saída com amigos, uma noite a dois ou um momento só seu — aqui 
-      você vai encontrar o equilíbrio perfeito entre ambiente, serviço e experiência.
-    </p>
-    <div class="sobre-detail" style="margin-top:1.8rem">Av. Iraí, 519 · Pinhais, PR</div>
-    <div class="sobre-detail">Ter–Dom · 19:00 às 02:30</div>
-    <div class="sobre-detail">Atendimento premiado pelos clientes</div>
-    <br><br>
-    <a href="#reserva" class="btn-glow" style="display:inline-flex">✦ Garantir Minha Mesa</a>
+    </div>
   </div>
-</div>
-```
-
+  <div class="sobre-text-content" data-aos="fade-left" data-aos-duration="800" data-aos-delay="100">
+    <div class="section-tag">Sobre o Espaço</div>
+    <h2 class="sobre-heading">Um Lugar <span class="accent">Criado</span><br>Para Você</h2>
+    <p class="sobre-desc">O <strong>Espaço Dlevis Lounge & Bar</strong> é mais do que um bar — é um refúgio noturno onde a sofisticação encontra o conforto. Localizado em Pinhais, cada detalhe foi pensado para criar momentos especiais.</p>
+    <div class="sobre-features">
+      <div class="sobre-feature"><div class="sobre-feature-icon">🌙</div>Ambiente noturno com iluminação exclusiva</div>
+      <div class="sobre-feature"><div class="sobre-feature-icon">💨</div>Narguilé premium preparado com cuidado</div>
+      <div class="sobre-feature"><div class="sobre-feature-icon">🥂</div>Cardápio completo de bebidas selecionadas</div>
+      <div class="sobre-feature"><div class="sobre-feature-icon">🎶</div>Curadoria musical para cada momento</div>
+    </div>
+    <a href="#reserva" class="btn-primary"><span>✦ Reservar Minha Mesa</span></a>
   </div>
 </section>
 
-<div class="div-line"></div>
-
-<!-- ══════════ EXPERIÊNCIA ══════════ -->
+<!-- EXPERIÊNCIA -->
 
 <section id="experiencia">
-  <div class="sec-wrap">
-    <div class="exp-header" data-aos="fade-up">
-      <p class="sec-tag">O que você encontra</p>
-      <h2 class="sec-title">Nossa<br><span class="accent">Experiência</span></h2>
-      <p class="sec-body" style="max-width:420px">Cada elemento foi desenhado para elevar sua noite a outro nível.</p>
+  <div class="section-header">
+    <div class="section-tag" data-aos="fade-up">Nossa Experiência</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="50">O QUE NOS <span class="accent">DEFINE</span></h2>
+    <div class="section-divider" data-aos="fade-up" data-aos-delay="100"></div>
+    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="150">Cada detalhe foi pensado para elevar sua noite a outro nível</p>
+  </div>
+  <div class="exp-grid">
+    <div class="exp-card" data-aos="fade-up" data-aos-delay="0">
+      <div class="exp-number">01</div>
+      <div class="exp-icon">💨</div>
+      <div class="exp-title">Narguilé Premium</div>
+      <div class="exp-desc">Preparados com cuidado, sabores exclusivos e fumaça densa que cria a atmosfera perfeita para sua noite.</div>
     </div>
-    <div class="exp-grid" data-aos="fade-up" data-aos-delay="100">
-      <div class="exp-item">
-        <div class="exp-line"></div>
-        <span class="exp-em">💨</span>
-        <span class="exp-name">Narguilé Premium</span>
-        <p class="exp-desc">Sabores exclusivos, fumaça densa e preparação artesanal que define o ambiente.</p>
-      </div>
-      <div class="exp-item">
-        <div class="exp-line"></div>
-        <span class="exp-em">🍺</span>
-        <span class="exp-name">Bebidas Geladas</span>
-        <p class="exp-desc">Drinks autorais, cervejas selecionadas e opções para todos os gostos.</p>
-      </div>
-      <div class="exp-item">
-        <div class="exp-line"></div>
-        <span class="exp-em">🎶</span>
-        <span class="exp-name">Música & Vibe</span>
-        <p class="exp-desc">Curadoria musical que define o ritmo perfeito para cada momento da noite.</p>
-      </div>
-      <div class="exp-item">
-        <div class="exp-line"></div>
-        <span class="exp-em">🛋️</span>
-        <span class="exp-name">Conforto Total</span>
-        <p class="exp-desc">Espaço aconchegante e bem decorado para você relaxar e curtir à vontade.</p>
-      </div>
-      <div class="exp-item">
-        <div class="exp-line"></div>
-        <span class="exp-em">🌙</span>
-        <span class="exp-name">Vibe Noturna</span>
-        <p class="exp-desc">Iluminação e atmosfera que tornam cada visita uma experiência única.</p>
-      </div>
+    <div class="exp-card" data-aos="fade-up" data-aos-delay="80">
+      <div class="exp-number">02</div>
+      <div class="exp-icon">🍸</div>
+      <div class="exp-title">Drinks & Bebidas</div>
+      <div class="exp-desc">Cardápio completo com cervejas artesanais, drinks autorais e opções para todos os gostos e momentos.</div>
+    </div>
+    <div class="exp-card" data-aos="fade-up" data-aos-delay="160">
+      <div class="exp-number">03</div>
+      <div class="exp-icon">🎶</div>
+      <div class="exp-title">Música & Vibe</div>
+      <div class="exp-desc">Curadoria musical que define o ritmo perfeito para sua noite — do ambiente tranquilo ao mais animado.</div>
+    </div>
+    <div class="exp-card" data-aos="fade-up" data-aos-delay="240">
+      <div class="exp-number">04</div>
+      <div class="exp-icon">🛋️</div>
+      <div class="exp-title">Conforto Total</div>
+      <div class="exp-desc">Espaço aconchegante com decoração cuidadosa para você relaxar, conversar e aproveitar à vontade.</div>
+    </div>
+    <div class="exp-card" data-aos="fade-up" data-aos-delay="320">
+      <div class="exp-number">05</div>
+      <div class="exp-icon">🔥</div>
+      <div class="exp-title">Atmosfera Única</div>
+      <div class="exp-desc">Iluminação e decoração que transformam cada visita em uma experiência visualmente inesquecível.</div>
+    </div>
+    <div class="exp-card" data-aos="fade-up" data-aos-delay="400">
+      <div class="exp-number">06</div>
+      <div class="exp-icon">🤝</div>
+      <div class="exp-title">Atendimento VIP</div>
+      <div class="exp-desc">Uma equipe dedicada a fazer você se sentir especial desde o primeiro momento até o último gole.</div>
     </div>
   </div>
 </section>
 
-<div class="div-line"></div>
-
-<!-- ══════════ GALERIA ══════════ -->
+<!-- GALERIA -->
 
 <section id="galeria">
-  <div class="sec-wrap">
-    <div class="gal-header" data-aos="fade-up">
-      <div>
-        <p class="sec-tag">Ambiente</p>
-        <h2 class="sec-title">Veja o<br><span class="accent">Espaço</span></h2>
-      </div>
-      <p class="sec-body" style="max-width:320px;text-align:right">Um lugar que você precisa ver para acreditar.</p>
+  <div class="section-header">
+    <div class="section-tag" data-aos="fade-up">Galeria</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="50">VEja o <span class="accent">Ambiente</span></h2>
+    <div class="section-divider" data-aos="fade-up" data-aos-delay="100"></div>
+    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="150">Um espaço que você precisa ver para acreditar</p>
+  </div>
+  <div class="gallery-grid" data-aos="fade-up" data-aos-delay="200">
+    <div class="gallery-item" onclick="openLightbox('💨')">
+      <div class="gallery-bg g1" style="font-size:120px">💨</div>
+      <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div><div class="gallery-overlay-text">Narguilé Premium</div></div>
     </div>
-    <div class="gal-grid">
-      <div class="gp gp1" data-aos="fade-up" onclick="openLb(0)">
-        <div class="gp-inner gpc1">
-          <div class="gp-big-icon">💨</div>
-          <div class="gp-scene">
-            <div class="gp-scene-l">Destaque do espaço</div>
-            <div class="gp-scene-t">Narguilé Premium</div>
-          </div>
-        </div>
-        <div class="gp-overlay"><span class="gp-ol-icon">🔍</span><span class="gp-ol-txt">Ver</span></div>
-      </div>
-      <div class="gp gp2" data-aos="fade-up" data-aos-delay="80" onclick="openLb(1)">
-        <div class="gp-inner gpc2">
-          <div class="gp-big-icon">🍸</div>
-          <div class="gp-scene">
-            <div class="gp-scene-l">Bar</div>
-            <div class="gp-scene-t">Drinks & Coquetéis</div>
-          </div>
-        </div>
-        <div class="gp-overlay"><span class="gp-ol-icon">🔍</span><span class="gp-ol-txt">Ver</span></div>
-      </div>
-      <div class="gp gp3" data-aos="fade-up" data-aos-delay="120" onclick="openLb(2)">
-        <div class="gp-inner gpc3">
-          <div class="gp-big-icon">✨</div>
-          <div class="gp-scene">
-            <div class="gp-scene-l">Ambiente</div>
-            <div class="gp-scene-t">Iluminação Premium</div>
-          </div>
-        </div>
-        <div class="gp-overlay"><span class="gp-ol-icon">🔍</span><span class="gp-ol-txt">Ver</span></div>
-      </div>
-      <div class="gp gp4" data-aos="fade-up" data-aos-delay="160" onclick="openLb(3)">
-        <div class="gp-inner gpc4" style="min-height:180px">
-          <div class="gp-big-icon">🔥</div>
-          <div class="gp-scene">
-            <div class="gp-scene-l">Clima</div>
-            <div class="gp-scene-t">Vibe Única</div>
-          </div>
-        </div>
-        <div class="gp-overlay"><span class="gp-ol-icon">🔍</span><span class="gp-ol-txt">Ver</span></div>
-      </div>
-      <div class="gp gp5" data-aos="fade-up" data-aos-delay="200" onclick="openLb(4)">
-        <div class="gp-inner gpc5" style="min-height:180px">
-          <div class="gp-big-icon">🎶</div>
-          <div class="gp-scene">
-            <div class="gp-scene-l">Noite</div>
-            <div class="gp-scene-t">Lounge Night</div>
-          </div>
-        </div>
-        <div class="gp-overlay"><span class="gp-ol-icon">🔍</span><span class="gp-ol-txt">Ver</span></div>
-      </div>
-      <div class="gp gp6" data-aos="fade-up" data-aos-delay="240" onclick="openLb(5)">
-        <div class="gp-inner gpc6" style="min-height:180px">
-          <div class="gp-big-icon">🏆</div>
-          <div class="gp-scene">
-            <div class="gp-scene-l">Memórias</div>
-            <div class="gp-scene-t">Momentos Únicos</div>
-          </div>
-        </div>
-        <div class="gp-overlay"><span class="gp-ol-icon">🔍</span><span class="gp-ol-txt">Ver</span></div>
-      </div>
+    <div class="gallery-item" onclick="openLightbox('🍸')">
+      <div class="gallery-bg g2">🍸</div>
+      <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div><div class="gallery-overlay-text">Drinks & Bar</div></div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('✨')">
+      <div class="gallery-bg g3">✨</div>
+      <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div><div class="gallery-overlay-text">Iluminação Premium</div></div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('🎶')">
+      <div class="gallery-bg g4">🎶</div>
+      <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div><div class="gallery-overlay-text">Noite de Lounge</div></div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('🏆')">
+      <div class="gallery-bg g5">🏆</div>
+      <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div><div class="gallery-overlay-text">Momentos Especiais</div></div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('🛋️')">
+      <div class="gallery-bg g6">🛋️</div>
+      <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div><div class="gallery-overlay-text">Ambiente Confortável</div></div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('🌙')">
+      <div class="gallery-bg g7">🌙</div>
+      <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div><div class="gallery-overlay-text">Noite Perfeita</div></div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('🥂')">
+      <div class="gallery-bg g8">🥂</div>
+      <div class="gallery-overlay"><div class="gallery-overlay-icon">🔍</div><div class="gallery-overlay-text">Celebrações</div></div>
     </div>
   </div>
 </section>
 
-<!-- Lightbox -->
+<!-- LIGHTBOX -->
 
-<div class="lb" id="lb" onclick="closeLb()">
-  <div class="lb-box" onclick="event.stopPropagation()">
-    <div class="lb-content" id="lbContent"></div>
-    <button class="lb-close" onclick="closeLb()">✕</button>
-  </div>
+<div id="lightbox" onclick="closeLightbox()">
+  <div id="lightbox-content"></div>
+  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
 </div>
 
-<div class="div-line"></div>
-
-<!-- ══════════ AVALIAÇÕES ══════════ -->
+<!-- AVALIAÇÕES -->
 
 <section id="avaliacoes">
-  <div class="sec-wrap">
-    <div class="av-header" data-aos="fade-up">
-      <div>
-        <p class="sec-tag">Prova Social</p>
-        <h2 class="sec-title">O Que Dizem<br>Sobre <span class="accent">Nós</span></h2>
-      </div>
-      <div class="av-rating-big">
-        <div class="av-number">5.0</div>
-        <div class="av-stars">★★★★★</div>
-        <div class="av-label">Google Reviews</div>
-      </div>
-    </div>
-    <div class="av-track-wrap" data-aos="fade-up" data-aos-delay="80">
-      <div class="av-track" id="avTrack">
-        <div class="av-card">
-          <div class="av-stars2">★★★★★</div>
-          <p class="av-text">Atendimento top! O pessoal é super atencioso e o lugar é muito confortável. Com certeza voltarei muitas vezes.</p>
-          <div class="av-author">
-            <div class="av-avatar">😊</div>
-            <div>
-              <div class="av-name">Ana Paula S.</div>
-              <div class="av-meta">Via Google · Pinhais, PR</div>
-            </div>
-          </div>
-        </div>
-        <div class="av-card">
-          <div class="av-stars2">★★★★★</div>
-          <p class="av-text">Ambiente muito agradável e tranquilo, perfeito para sair com a família. Narguilé de qualidade e bebidas sempre geladas!</p>
-          <div class="av-author">
-            <div class="av-avatar">🙌</div>
-            <div>
-              <div class="av-name">Carlos R.</div>
-              <div class="av-meta">Via Google · Pinhais, PR</div>
-            </div>
-          </div>
-        </div>
-        <div class="av-card">
-          <div class="av-stars2">★★★★★</div>
-          <p class="av-text">Lugar organizado, limpo e com ótimo atendimento. O ambiente noturno é incrível, super recomendo para quem quer curtir bem!</p>
-          <div class="av-author">
-            <div class="av-avatar">🎉</div>
-            <div>
-              <div class="av-name">Fernanda L.</div>
-              <div class="av-meta">Via Google · Pinhais, PR</div>
-            </div>
-          </div>
-        </div>
-        <div class="av-card">
-          <div class="av-stars2">★★★★★</div>
-          <p class="av-text">Fui com os amigos e foi uma noite incrível! Voltarei com certeza. Atendimento excelente e o espaço é muito bem cuidado.</p>
-          <div class="av-author">
-            <div class="av-avatar">🔥</div>
-            <div>
-              <div class="av-name">Rodrigo M.</div>
-              <div class="av-meta">Via Google · Curitiba, PR</div>
-            </div>
-          </div>
-        </div>
-        <div class="av-card">
-          <div class="av-stars2">★★★★★</div>
-          <p class="av-text">Melhor lounge da região! Narguilé preparado com cuidado, ambiente sofisticado e uma vibe incrível. Lugar diferenciado mesmo.</p>
-          <div class="av-author">
-            <div class="av-avatar">💎</div>
-            <div>
-              <div class="av-name">Juliana K.</div>
-              <div class="av-meta">Via Google · Pinhais, PR</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="av-controls">
-      <div class="av-dots" id="avDots">
-        <div class="av-dot on" onclick="goAv(0)"></div>
-        <div class="av-dot" onclick="goAv(1)"></div>
-        <div class="av-dot" onclick="goAv(2)"></div>
-      </div>
-      <button class="av-btn" onclick="prevAv()">←</button>
-      <button class="av-btn" onclick="nextAv()">→</button>
+  <div class="section-header">
+    <div class="section-tag" data-aos="fade-up">Avaliações</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="50">O Que <span class="accent">Dizem</span> Sobre Nós</h2>
+    <div class="section-divider" data-aos="fade-up" data-aos-delay="100"></div>
+    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="150">Avaliação perfeita no Google. Veja o que nossos clientes falam</p>
+  </div>
+  <div class="reviews-track-wrap">
+    <div class="reviews-track" id="reviewsTrack">
+      <!-- Reviews cloned via JS -->
     </div>
   </div>
 </section>
 
-<div class="div-line"></div>
-
-<!-- ══════════ RESERVA ══════════ -->
+<!-- RESERVA -->
 
 <section id="reserva">
-  <div class="sec-wrap">
-    <div class="reserva-layout">
-      <div class="reserva-left" data-aos="fade-right">
-        <p class="sec-tag">Reserve agora</p>
-        <h2 class="sec-title">Garanta<br>Sua <span class="accent">Mesa</span></h2>
-        <p class="sec-body">Não deixe para a última hora. Reserve com antecedência e chegue relaxado para aproveitar cada segundo.</p>
-        <div class="reserva-why">
-          <div class="why-item"><div class="why-dot"></div>Confirmação via WhatsApp em minutos</div>
-          <div class="why-item"><div class="why-dot"></div>Mesa reservada no seu nome</div>
-          <div class="why-item"><div class="why-dot"></div>Sem fila, sem stress</div>
-          <div class="why-item"><div class="why-dot"></div>Cancele quando precisar</div>
+  <div class="reserva-inner">
+    <div class="reserva-left" data-aos="fade-right" data-aos-duration="800">
+      <div class="section-tag">Reservas</div>
+      <h2 class="section-title">Garanta <span class="accent">Sua</span><br>Mesa</h2>
+      <div class="section-divider" style="margin:20px 0"></div>
+      <p style="color:var(--muted);font-family:var(--font-serif);font-style:italic;font-size:18px;line-height:1.7;margin-bottom:40px">
+        Não perca sua vaga. Reserve agora e chegue sem preocupação. Sua noite começa no momento em que você garante seu espaço.
+      </p>
+      <div class="reserva-promise">
+        <div class="reserva-promise-item">
+          <div class="reserva-promise-icon">⚡</div>
+          <div>
+            <div class="reserva-promise-title">Confirmação Rápida</div>
+            <div class="reserva-promise-text">Receba a confirmação diretamente no seu WhatsApp em minutos</div>
+          </div>
+        </div>
+        <div class="reserva-promise-item">
+          <div class="reserva-promise-icon">🌟</div>
+          <div>
+            <div class="reserva-promise-title">Atendimento Prioritário</div>
+            <div class="reserva-promise-text">Quem reserva tem mesa garantida e atendimento preferencial</div>
+          </div>
+        </div>
+        <div class="reserva-promise-item">
+          <div class="reserva-promise-icon">🔓</div>
+          <div>
+            <div class="reserva-promise-title">Sem Custo</div>
+            <div class="reserva-promise-text">Reserva totalmente gratuita, sem taxas ou cobranças antecipadas</div>
+          </div>
         </div>
       </div>
-      <div data-aos="fade-left" data-aos-delay="100">
-        <div class="form-box">
-          <div class="form-box-glow"></div>
-          <div class="f-row">
-            <div class="f-group">
-              <label class="f-label">Seu Nome</label>
-              <input type="text" class="f-input" placeholder="Como te chamamos?" id="fNome">
-            </div>
-            <div class="f-group">
-              <label class="f-label">WhatsApp</label>
-              <input type="tel" class="f-input" placeholder="(41) 9 0000-0000" id="fWpp">
-            </div>
-          </div>
-          <div class="f-row">
-            <div class="f-group">
-              <label class="f-label">Data</label>
-              <input type="date" class="f-input" id="fData">
-            </div>
-            <div class="f-group">
-              <label class="f-label">Horário</label>
-              <select class="f-input" id="fHorario">
-                <option value="">Quando?</option>
-                <option>19:00</option><option>20:00</option><option>21:00</option>
-                <option>22:00</option><option>23:00</option><option>00:00</option>
-                <option>01:00</option>
-              </select>
-            </div>
-          </div>
-          <div class="f-group">
-            <label class="f-label">Pessoas</label>
-            <select class="f-input" id="fPessoas">
-              <option value="">Quantas pessoas?</option>
-              <option>1 pessoa</option><option>2 pessoas</option><option>3 pessoas</option>
-              <option>4 pessoas</option><option>5 pessoas</option><option>6+ pessoas</option>
-            </select>
-          </div>
-          <button class="f-submit" onclick="sendRes()">
-            <span>💬</span><span>Reservar via WhatsApp</span>
-          </button>
-          <p class="f-note">Você será redirecionado para o <span class="f-wpp">WhatsApp</span> para confirmar.</p>
+    </div>
+    <div class="reserva-form" data-aos="fade-left" data-aos-duration="800" data-aos-delay="100">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Seu Nome</label>
+          <input type="text" id="f-nome" placeholder="Ex: Maria Silva">
+        </div>
+        <div class="form-group">
+          <label>WhatsApp</label>
+          <input type="tel" id="f-wa" placeholder="(41) 9xxxx-xxxx">
         </div>
       </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Data da Visita</label>
+          <input type="date" id="f-data">
+        </div>
+        <div class="form-group">
+          <label>Número de Pessoas</label>
+          <select id="f-pessoas">
+            <option value="">Quantas pessoas?</option>
+            <option>1 pessoa</option>
+            <option>2 pessoas</option>
+            <option>3 pessoas</option>
+            <option>4 pessoas</option>
+            <option>5 pessoas</option>
+            <option>6+ pessoas</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Horário Preferido</label>
+        <select id="f-horario">
+          <option value="">Selecione o horário</option>
+          <option>19:00 – 20:00</option>
+          <option>20:00 – 21:00</option>
+          <option>21:00 – 22:00</option>
+          <option>22:00 – 23:00</option>
+          <option>23:00 – 00:00</option>
+          <option>00:00 – 01:00</option>
+          <option>01:00 – 02:30</option>
+        </select>
+      </div>
+      <button class="btn-reservar" onclick="enviarReserva()">✦ RESERVAR AGORA</button>
+      <div class="reserva-note">💬 Você será redirecionado para o WhatsApp para confirmar</div>
     </div>
   </div>
 </section>
 
-<div class="div-line"></div>
-
-<!-- ══════════ CONTATO ══════════ -->
+<!-- CONTATO -->
 
 <section id="contato">
-  <div class="sec-wrap">
-    <div data-aos="fade-up" style="margin-bottom:3rem">
-      <p class="sec-tag">Venha nos visitar</p>
-      <h2 class="sec-title">Onde <span class="accent">Estamos</span></h2>
-    </div>
-    <div class="contato-grid">
-      <div data-aos="fade-right">
-        <div class="ctt-items">
-          <div class="ctt-item">
-            <span class="ctt-ico">📍</span>
-            <div>
-              <div class="ctt-lbl">Endereço</div>
-              <div class="ctt-val">Av. Iraí, 519 · Pinhais · PR</div>
-            </div>
-          </div>
-          <div class="ctt-item">
-            <span class="ctt-ico">📱</span>
-            <div>
-              <div class="ctt-lbl">WhatsApp & Telefone</div>
-              <div class="ctt-val"><a href="tel:+5541995459915">(41) 99545-9915</a></div>
-            </div>
-          </div>
-          <div class="ctt-item">
-            <span class="ctt-ico">🕐</span>
-            <div>
-              <div class="ctt-lbl">Funcionamento</div>
-              <div class="ctt-val">Ter a Dom · 19:00 às 02:30</div>
-            </div>
-          </div>
-          <div class="ctt-item">
-            <span class="ctt-ico">📸</span>
-            <div>
-              <div class="ctt-lbl">Redes Sociais</div>
-              <div class="ctt-val">@espacodlevis</div>
-            </div>
-          </div>
+  <div class="section-header">
+    <div class="section-tag" data-aos="fade-up">Localização</div>
+    <h2 class="section-title" data-aos="fade-up" data-aos-delay="50">Onde <span class="accent">Estamos</span></h2>
+    <div class="section-divider" data-aos="fade-up" data-aos-delay="100"></div>
+  </div>
+  <div class="contato-grid">
+    <div class="contato-info" data-aos="fade-right">
+      <div class="contato-item">
+        <div class="contato-icon">📍</div>
+        <div>
+          <div class="contato-label">Endereço</div>
+          <div class="contato-value">Av. Iraí, 519</div>
+          <div class="contato-sub">Pinhais · Paraná · Brasil</div>
         </div>
-        <a href="https://wa.me/5541995459915" target="_blank" class="btn-glow" style="margin-top:1.5rem;display:inline-flex">💬 Chamar no WhatsApp</a>
       </div>
-      <div data-aos="fade-left" data-aos-delay="100">
-        <div class="map-box">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3600!2d-49.19!3d-25.43!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94dce4dde94cc065%3A0x0!2zMjXCsDI1JzQ4LjAiUyA0OcKwMTEnMjQuMCJX!5e0!3m2!1spt-BR!2sbr!4v1"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Espaço Dlevis Lounge & Bar">
-          </iframe>
+      <div class="contato-item">
+        <div class="contato-icon">📱</div>
+        <div>
+          <div class="contato-label">WhatsApp</div>
+          <div class="contato-value"><a href="tel:+5541995459915" style="color:inherit;text-decoration:none">(41) 99545-9915</a></div>
+          <div class="contato-sub">Disponível para reservas</div>
         </div>
-        <a href="https://maps.google.com/?q=Av.+Iraí,+519,+Pinhais,+PR" target="_blank" class="map-cta">🗺️ Abrir no Google Maps</a>
+      </div>
+      <div class="contato-item">
+        <div class="contato-icon">🕐</div>
+        <div>
+          <div class="contato-label">Horário</div>
+          <div class="contato-value">Ter – Dom · 19:00 às 02:30</div>
+          <div class="contato-sub">Segunda fechado</div>
+        </div>
+      </div>
+      <div class="contato-social">
+        <a href="#" class="social-link" title="Instagram">📸</a>
+        <a href="#" class="social-link" title="Facebook">👤</a>
+        <a href="#" class="social-link" title="TikTok">🎵</a>
+        <a href="https://wa.me/5541995459915" class="social-link" title="WhatsApp">💬</a>
+      </div>
+    </div>
+    <div class="contato-map" data-aos="fade-left">
+      <div class="map-grid"></div>
+      <div class="map-placeholder">
+        <div class="map-pin">📍</div>
+        <div class="map-name">ESPAÇO DLEVIS</div>
+        <div class="map-address">Av. Iraí, 519 · Pinhais, PR</div>
+        <a href="https://maps.google.com/?q=Av.+Iraí,+519,+Pinhais,+PR" target="_blank" class="btn-maps">🗺️ Abrir no Google Maps</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════ FOOTER ══════════ -->
+<!-- FOOTER -->
 
 <footer>
-  <div class="footer-inner">
-    <div class="footer-logo">DLEVIS</div>
-    <p class="footer-phrase">"Viva a noite do jeito certo."</p>
-    <div class="footer-socials">
-      <a href="https://wa.me/5541995459915" target="_blank" class="f-soc" title="WhatsApp">💬</a>
-      <a href="#" class="f-soc" title="Instagram">📸</a>
-      <a href="#" class="f-soc" title="Facebook">👤</a>
-      <a href="#" class="f-soc" title="TikTok">🎵</a>
-    </div>
-    <p class="footer-copy">© 2025 Espaço Dlevis Lounge & Bar · Av. Iraí, 519 · Pinhais, PR · Todos os direitos reservados.</p>
+  <span class="footer-logo">DLEVIS</span>
+  <p class="footer-tagline">"Viva a noite do jeito certo"</p>
+  <div class="footer-links">
+    <a href="#sobre">Sobre</a>
+    <a href="#experiencia">Experiência</a>
+    <a href="#galeria">Galeria</a>
+    <a href="#avaliacoes">Avaliações</a>
+    <a href="#reserva">Reservar</a>
+    <a href="#contato">Contato</a>
   </div>
+  <div class="footer-copy">© 2025 Espaço Dlevis Lounge & Bar · Av. Iraí, 519 · Pinhais, PR · Todos os direitos reservados</div>
 </footer>
 
-<!-- ══════════════════ SCRIPTS ══════════════════ -->
+<!-- FLOATING BUTTONS -->
+
+<a href="https://wa.me/5541995459915" id="wa-float" target="_blank" title="WhatsApp">💬</a>
+<a href="#hero" id="back-top" title="Voltar ao topo">↑</a>
 
 <script>
-gsap.registerPlugin(ScrollTrigger);
-
-/* ── CURSOR ─────────────────────── */
-const cur = document.getElementById('cur');
-const curR = document.getElementById('cur-ring');
-let mx=0,my=0,rx=0,ry=0;
-
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX; my=e.clientY;
-  cur.style.left=mx+'px'; cur.style.top=my+'px';
-});
-(function lerpRing(){
-  rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
-  curR.style.left=rx+'px'; curR.style.top=ry+'px';
-  requestAnimationFrame(lerpRing);
+// ─── PARTICLES ───
+(function(){
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  class Particle {
+    constructor(){
+      this.x = Math.random()*canvas.width;
+      this.y = Math.random()*canvas.height;
+      this.vx = (Math.random()-0.5)*0.3;
+      this.vy = (Math.random()-0.5)*0.3 - 0.1;
+      this.size = Math.random()*1.5+0.3;
+      this.opacity = Math.random()*0.4+0.1;
+      this.hue = Math.random()>0.5 ? 270 : 300;
+    }
+    update(){
+      this.x+=this.vx; this.y+=this.vy;
+      if(this.y<0||this.y>canvas.height||this.x<0||this.x>canvas.width){
+        this.x=Math.random()*canvas.width; this.y=canvas.height+10;
+      }
+    }
+    draw(){
+      ctx.save();
+      ctx.globalAlpha=this.opacity;
+      ctx.fillStyle=`hsl(${this.hue},80%,70%)`;
+      ctx.shadowColor=`hsl(${this.hue},80%,70%)`;
+      ctx.shadowBlur=6;
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+  for(let i=0;i<80;i++) particles.push(new Particle());
+  function loop(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{ p.update(); p.draw(); });
+    requestAnimationFrame(loop);
+  }
+  loop();
 })();
 
-document.querySelectorAll('a,button,.gp,.av-card,.mood-chip,.ctt-item,.exp-item,.hero-card').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('cur-hover'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('cur-hover'));
+// ─── CUSTOM CURSOR ───
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursor-trail');
+let mx=0,my=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cursor.style.left=mx+'px'; cursor.style.top=my+'px';
 });
+(function animTrail(){
+  tx+=(mx-tx)*0.1; ty+=(my-ty)*0.1;
+  trail.style.left=tx+'px'; trail.style.top=ty+'px';
+  requestAnimationFrame(animTrail);
+})();
 
-/* ── LOADER ─────────────────────── */
+// ─── LOADER ───
 window.addEventListener('load',()=>{
-  const ldw=document.getElementById('ldw');
-  const ldBar=document.getElementById('ldBar');
-  const ldSub=document.getElementById('ldSub');
-  const loader=document.getElementById('loader');
-
-  // Reveal wordmark
-  gsap.to(ldw,{clipPath:'inset(0 0% 0 0)',duration:1,ease:'power3.inOut'});
-  gsap.to(ldSub,{opacity:1,y:0,duration:.6,delay:.4});
-  gsap.fromTo(ldSub,{y:8},{y:0,duration:.6,delay:.4});
-
-  // Bar fill
-  setTimeout(()=>{ ldBar.style.transition='width 1.8s cubic-bezier(.4,0,.2,1)'; ldBar.style.width='100%'; },100);
-
+  const loaderLogo = document.querySelector('.loader-logo');
+  gsap.to(loaderLogo,{opacity:1,duration:0.6,ease:'power2.out'});
   setTimeout(()=>{
-    gsap.to(loader,{opacity:0,duration:.7,ease:'power2.in',onComplete:()=>{
-      loader.style.display='none';
-      startHero();
+    gsap.to('#loader',{opacity:0,duration:0.8,ease:'power2.inOut',onComplete:()=>{
+      document.getElementById('loader').style.display='none';
+      initHero();
     }});
-  },2400);
+  },2200);
 });
 
-function startHero(){
-  // AOS init
-  AOS.init({duration:800,once:true,offset:60,easing:'ease-out-cubic'});
-
-  const tl=gsap.timeline();
-  tl.to('#hlabel',{opacity:1,y:0,duration:.7,ease:'power3.out'})
-    .to('#hw1',{opacity:1,y:0,duration:.6,ease:'power3.out'},'-=.3')
-    .to('#hw2',{opacity:1,y:0,duration:.6,ease:'power3.out'},'-=.4')
-    .to('#hw3',{opacity:1,y:0,duration:.6,ease:'power3.out'},'-=.4')
-    .to('#hsub',{opacity:1,y:0,duration:.6,ease:'power3.out'},'-=.3')
-    .to('#hbtns',{opacity:1,y:0,duration:.6,ease:'power3.out'},'-=.3')
-    .to('#heroRight',{opacity:1,y:0,duration:.8,ease:'power3.out'},'-=.6')
-    .to('#scrollHint',{opacity:1,duration:.5},'-=.2');
-
-  gsap.set(['#hlabel','#hw1','#hw2','#hw3','#hsub','#hbtns','#heroRight'],{y:30});
+// ─── HERO GSAP ───
+function initHero(){
+  gsap.to('#hero-eyebrow',{opacity:1,y:0,duration:0.8,ease:'power3.out',delay:0.1});
+  gsap.to('#hero-title',{opacity:1,y:0,duration:1,ease:'power3.out',delay:0.3});
+  gsap.to('#hero-subtitle',{opacity:1,y:0,duration:0.8,ease:'power3.out',delay:0.6});
+  gsap.to('#hero-actions',{opacity:1,y:0,duration:0.8,ease:'power3.out',delay:0.8});
+  gsap.to('#hero-stats',{opacity:1,duration:0.8,ease:'power2.out',delay:1.2});
+  gsap.to('#hero-scroll',{opacity:0.6,duration:0.8,ease:'power2.out',delay:1.5});
 }
 
-/* ── PARTICLES / CANVAS ─────────── */
-const canvas=document.getElementById('bg-canvas');
-const ctx=canvas.getContext('2d');
-let W,H,pts=[];
+// ─── AOS ───
+AOS.init({duration:700,easing:'ease-out-cubic',once:true,offset:80});
 
-function resizeCv(){W=canvas.width=innerWidth;H=canvas.height=innerHeight}
-resizeCv();
-window.addEventListener('resize',resizeCv);
-
-const pCols=['rgba(155,48,255,','rgba(168,216,240,','rgba(212,168,67,','rgba(199,125,255,'];
-for(let i=0;i<90;i++){
-  pts.push({
-    x:Math.random()*innerWidth,y:Math.random()*innerHeight,
-    r:Math.random()*1.8+.3,
-    vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,
-    a:Math.random(),da:(Math.random()-.5)*.007,
-    c:pCols[0|Math.random()*pCols.length]
-  });
-}
-function drawPts(){
-  ctx.clearRect(0,0,W,H);
-  pts.forEach(p=>{
-    p.x+=p.vx; p.y+=p.vy;
-    p.a+=p.da;
-    if(p.a<0||p.a>1)p.da*=-1;
-    if(p.x<0)p.x=W; if(p.x>W)p.x=0;
-    if(p.y<0)p.y=H; if(p.y>H)p.y=0;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle=p.c+p.a+')';
-    ctx.fill();
-  });
-  requestAnimationFrame(drawPts);
-}
-drawPts();
-
-/* ── NAV ─────────────────────────── */
-const nav=document.getElementById('nav');
-const btt=document.getElementById('btt');
+// ─── NAV SCROLL ───
+const navbar = document.getElementById('navbar');
+const backTop = document.getElementById('back-top');
 window.addEventListener('scroll',()=>{
-  nav.classList.toggle('stuck',scrollY>60);
-  btt.classList.toggle('show',scrollY>400);
+  if(window.scrollY>60){ navbar.classList.add('scrolled'); backTop.classList.add('visible'); }
+  else { navbar.classList.remove('scrolled'); backTop.classList.remove('visible'); }
 });
 
-/* ── BURGER ──────────────────────── */
-const burger=document.getElementById('burger');
-const mobNav=document.getElementById('mobNav');
-burger.addEventListener('click',()=>{
-  burger.classList.toggle('on');
-  mobNav.classList.toggle('on');
+// ─── HAMBURGER ───
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click',()=>{
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
 });
-function closeMob(){burger.classList.remove('on');mobNav.classList.remove('on')}
+document.querySelectorAll('.mm-link').forEach(l=>{
+  l.addEventListener('click',()=>{ hamburger.classList.remove('open'); mobileMenu.classList.remove('open'); });
+});
 
-/* ── CAROUSEL ────────────────────── */
-let avIdx=0;
-const avTrack=document.getElementById('avTrack');
-const avDots=document.querySelectorAll('.av-dot');
-const avCards=avTrack.querySelectorAll('.av-card');
-
-function getVisCount(){return window.innerWidth<600?1:window.innerWidth<900?2:3}
-function getCardW(){
-  const gap=24;
-  return (avTrack.parentElement.offsetWidth-gap*(getVisCount()-1))/getVisCount()+gap;
-}
-function maxIdx(){return Math.max(0,avCards.length-getVisCount())}
-function goAv(i){
-  avIdx=Math.max(0,Math.min(i,maxIdx()));
-  avTrack.style.transform=`translateX(-${avIdx*getCardW()}px)`;
-  avDots.forEach((d,j)=>d.classList.toggle('on',j===avIdx));
-}
-function nextAv(){goAv(avIdx+1>maxIdx()?0:avIdx+1)}
-function prevAv(){goAv(avIdx-1<0?maxIdx():avIdx-1)}
-setInterval(nextAv,4500);
-window.addEventListener('resize',()=>goAv(avIdx));
-
-/* ── LIGHTBOX ────────────────────── */
-const lbData=[
-  {icon:'💨',title:'Narguilé Premium',desc:'Preparados com os melhores sabores. Fumaça densa que cria a atmosfera perfeita da noite.'},
-  {icon:'🍸',title:'Drinks & Coquetéis',desc:'Cardápio completo com drinks autorais, cervejas selecionadas e opções pra todos os gostos.'},
-  {icon:'✨',title:'Iluminação Premium',desc:'Ambiente com iluminação projetada para criar a vibe perfeita em cada momento da noite.'},
-  {icon:'🔥',title:'Vibe Única',desc:'Uma atmosfera que combina conforto, estilo e energia — inconfundível, inesquecível.'},
-  {icon:'🎶',title:'Lounge Night',desc:'Curadoria musical exclusiva que define o ritmo da sua noite — do tranquilo ao animado.'},
-  {icon:'🏆',title:'Momentos Únicos',desc:'Cada visita é uma experiência nova. Venha criar memórias no Dlevis.'},
+// ─── REVIEWS ───
+const reviews = [
+  {emoji:'😊',name:'Ana Paula S.',meta:'Via Google · Pinhais, PR',text:'Atendimento top! O pessoal é super atencioso e o lugar é muito confortável. Com certeza voltarei muitas vezes.'},
+  {emoji:'🙌',name:'Carlos R.',meta:'Via Google · Pinhais, PR',text:'Ambiente muito agradável e tranquilo, perfeito para sair com a família. Narguilé de qualidade e bebidas sempre geladas!'},
+  {emoji:'🎉',name:'Fernanda L.',meta:'Via Google · Pinhais, PR',text:'Lugar organizado, limpo e com ótimo atendimento. O ambiente noturno é incrível, super recomendo para quem quer curtir bem!'},
+  {emoji:'🔥',name:'Rodrigo M.',meta:'Via Google · Curitiba, PR',text:'Fui com os amigos e foi uma noite incrível! Voltarei com certeza. Atendimento excelente e o espaço é muito bem cuidado.'},
+  {emoji:'💎',name:'Juliana K.',meta:'Via Google · Pinhais, PR',text:'Melhor lounge da região! Narguilé preparado com cuidado, ambiente sofisticado e uma vibe incrível. Lugar diferenciado mesmo.'},
+  {emoji:'⭐',name:'Thiago B.',meta:'Via Google · Pinhais, PR',text:'Fui pela primeira vez e já quero voltar. O atendimento é muito atencioso e o ambiente é exatamente o que eu esperava. 5 estrelas!'},
 ];
-const lb=document.getElementById('lb');
-const lbC=document.getElementById('lbContent');
-
-function openLb(i){
-  const d=lbData[i];
-  lbC.innerHTML=`
-    <div style="font-size:5rem;filter:drop-shadow(0 0 30px rgba(155,48,255,.7))">${d.icon}</div>
-    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.06em;color:var(--chalk)">${d.title}</h3>
-    <p style="color:rgba(237,233,245,.65);text-align:center;max-width:340px;line-height:1.8;font-size:.92rem">${d.desc}</p>
-    <a href="#reserva" onclick="closeLb()" class="btn-glow" style="margin-top:.5rem">✦ Reservar Mesa</a>
-  `;
-  lb.classList.add('on');
-  gsap.fromTo(lb.querySelector('.lb-box'),{scale:.88,opacity:0},{scale:1,opacity:1,duration:.4,ease:'back.out(1.4)'});
-}
-function closeLb(){lb.classList.remove('on')}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb()});
-
-/* ── RESERVATION ─────────────────── */
-function sendRes(){
-  const nome=document.getElementById('fNome').value.trim();
-  const wpp=document.getElementById('fWpp').value.trim();
-  const data=document.getElementById('fData').value;
-  const horario=document.getElementById('fHorario').value;
-  const pessoas=document.getElementById('fPessoas').value;
-  if(!nome||!wpp){alert('Por favor, informe seu nome e WhatsApp.');return}
-  const dateStr=data?new Date(data+'T12:00:00').toLocaleDateString('pt-BR'):'A combinar';
-  const msg=encodeURIComponent(
-    `Olá! Quero reservar uma mesa no Espaço Dlevis 🌙\n\n`+
-    `👤 Nome: ${nome}\n📅 Data: ${dateStr}\n⏰ Horário: ${horario||'A combinar'}\n👥 Pessoas: ${pessoas||'A combinar'}\n\n`+
-    `Aguardo confirmação! 🥃`
-  );
-  window.open(`https://wa.me/5541995459915?text=${msg}`,'_blank');
-}
-
-/* ── MUSIC ───────────────────────── */
-const mBtn=document.getElementById('musicBtn');
-let aCtx=null,playing=false;
-mBtn.addEventListener('click',()=>{
-  if(!aCtx)aCtx=new(window.AudioContext||window.webkitAudioContext)();
-  playing=!playing;
-  mBtn.classList.toggle('on',playing);
-  mBtn.textContent=playing?'♫':'♪';
-  if(playing)playAmb();
-  else{aCtx.close();aCtx=null;}
+const track = document.getElementById('reviewsTrack');
+[...reviews,...reviews].forEach(r=>{
+  const card = document.createElement('div');
+  card.className = 'review-card';
+  card.innerHTML = `
+    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+    <div class="review-text">"${r.text}"</div>
+    <div class="review-author">
+      <div class="review-avatar">${r.emoji}</div>
+      <div><div class="review-name">${r.name}</div><div class="review-meta">${r.meta}</div></div>
+    </div>`;
+  track.appendChild(card);
 });
-function playAmb(){
-  if(!playing||!aCtx)return;
-  const freqs=[110,138.59,164.81,185,220,246.94,277.18];
-  const f=freqs[0|Math.random()*freqs.length];
-  const osc=aCtx.createOscillator();
-  const gain=aCtx.createGain();
-  const filt=aCtx.createBiquadFilter();
-  filt.type='lowpass';filt.frequency.value=600;
-  osc.type='sine';osc.frequency.value=f;
-  gain.gain.setValueAtTime(0,aCtx.currentTime);
-  gain.gain.linearRampToValueAtTime(.035,aCtx.currentTime+2);
-  gain.gain.linearRampToValueAtTime(0,aCtx.currentTime+5);
-  osc.connect(filt);filt.connect(gain);gain.connect(aCtx.destination);
-  osc.start();osc.stop(aCtx.currentTime+5);
-  setTimeout(playAmb,2500+Math.random()*2500);
+
+// ─── LIGHTBOX ───
+function openLightbox(emoji){
+  document.getElementById('lightbox-content').textContent = emoji;
+  document.getElementById('lightbox').classList.add('active');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('active');
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLightbox(); });
+
+// ─── RESERVA ───
+function enviarReserva(){
+  const nome = document.getElementById('f-nome').value.trim();
+  const wa = document.getElementById('f-wa').value.trim();
+  const data = document.getElementById('f-data').value;
+  const pessoas = document.getElementById('f-pessoas').value;
+  const horario = document.getElementById('f-horario').value;
+  if(!nome||!wa){ alert('Por favor, preencha seu nome e WhatsApp.'); return; }
+  const msg = `Olá! Quero reservar uma mesa no Espaço Dlevis.%0A%0A*Nome:* ${nome}%0A*WhatsApp:* ${wa}%0A*Data:* ${data||'A definir'}%0A*Pessoas:* ${pessoas||'A definir'}%0A*Horário:* ${horario||'A definir'}`;
+  window.open(`https://wa.me/5541995459915?text=${msg}`, '_blank');
 }
 
-/* ── GSAP SCROLL FX ──────────────── */
-gsap.utils.toArray('.exp-item').forEach((el,i)=>{
-  gsap.from(el,{
-    scrollTrigger:{trigger:el,start:'top 88%'},
-    opacity:0,y:30,duration:.7,delay:i*.07,ease:'power3.out'
+// ─── PARALLAX (leve) ───
+document.addEventListener('mousemove',e=>{
+  const x=(e.clientX/window.innerWidth-0.5)*20;
+  const y=(e.clientY/window.innerHeight-0.5)*20;
+  document.querySelectorAll('.hero-orb').forEach((o,i)=>{
+    const f=(i+1)*0.3;
+    o.style.transform=`translate(${x*f}px,${y*f}px)`;
   });
-});
-
-// Parallax on hero grid
-gsap.to('.hero-grid',{
-  scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true},
-  y:120,ease:'none'
-});
-// Hero stripe parallax
-gsap.to('.hero-stripe',{
-  scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true},
-  y:80,opacity:0,ease:'none'
 });
 </script>
 
