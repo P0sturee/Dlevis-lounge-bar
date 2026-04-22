@@ -1,0 +1,2074 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espaço Dlevis Lounge & Bar | Pinhais - PR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+<style>
+:root {
+  --black: #050508;
+  --deep: #0a0a12;
+  --purple: #7b2ff7;
+  --purple-dim: #4a1a9e;
+  --neon-purple: #bf5fff;
+  --neon-blue: #00d4ff;
+  --gold: #c9a84c;
+  --gold-light: #f0d080;
+  --white: #f0eeff;
+  --glass: rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.08);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+background: var(–black);
+color: var(–white);
+font-family: ‘Raleway’, sans-serif;
+overflow-x: hidden;
+cursor: none;
+}
+
+/* ── CUSTOM CURSOR ── */
+.cursor {
+width: 12px; height: 12px;
+background: var(–neon-purple);
+border-radius: 50%;
+position: fixed; top:0; left:0;
+pointer-events: none;
+z-index: 99999;
+transition: transform .15s ease, background .2s;
+mix-blend-mode: screen;
+}
+.cursor-ring {
+width: 36px; height: 36px;
+border: 1.5px solid var(–neon-purple);
+border-radius: 50%;
+position: fixed; top:0; left:0;
+pointer-events: none;
+z-index: 99998;
+transition: transform .35s cubic-bezier(.25,.46,.45,.94), opacity .3s;
+mix-blend-mode: screen;
+opacity: .6;
+}
+body:hover .cursor { transform: translate(-50%,-50%); }
+
+/* ── LOADER ── */
+#loader {
+position: fixed; inset:0;
+background: var(–black);
+z-index: 99997;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 24px;
+}
+.loader-logo {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: clamp(1.5rem, 4vw, 3rem);
+background: linear-gradient(135deg, var(–gold), var(–neon-purple), var(–neon-blue));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+letter-spacing: .2em;
+opacity: 0;
+}
+.loader-bar {
+width: 200px; height: 2px;
+background: rgba(255,255,255,0.1);
+border-radius: 2px;
+overflow: hidden;
+}
+.loader-fill {
+height: 100%;
+width: 0%;
+background: linear-gradient(90deg, var(–purple), var(–neon-blue), var(–gold));
+border-radius: 2px;
+transition: width 2s cubic-bezier(.4,0,.2,1);
+}
+.loader-text {
+font-family: ‘Raleway’, sans-serif;
+font-size: .75rem;
+letter-spacing: .4em;
+text-transform: uppercase;
+color: rgba(255,255,255,0.3);
+opacity: 0;
+}
+
+/* ── PARTICLES ── */
+#particles-canvas {
+position: fixed; inset:0;
+pointer-events: none;
+z-index: 0;
+opacity: .5;
+}
+
+/* ── SMOKE ── */
+.smoke-layer {
+position: absolute; inset:0;
+pointer-events: none;
+overflow: hidden;
+}
+.smoke-particle {
+position: absolute;
+border-radius: 50%;
+filter: blur(60px);
+animation: smokeFloat linear infinite;
+opacity: 0;
+}
+
+@keyframes smokeFloat {
+0%   { transform: translateY(100%) translateX(0) scale(.5); opacity:0; }
+20%  { opacity: .12; }
+80%  { opacity: .06; }
+100% { transform: translateY(-200%) translateX(60px) scale(1.8); opacity:0; }
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(–black); }
+::-webkit-scrollbar-thumb { background: linear-gradient(var(–purple), var(–neon-blue)); border-radius: 2px; }
+
+/* ── NAV ── */
+nav {
+position: fixed; top:0; left:0; right:0;
+z-index: 1000;
+padding: 0 5%;
+height: 72px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+transition: background .4s, box-shadow .4s;
+}
+nav.scrolled {
+background: rgba(5,5,8,.92);
+backdrop-filter: blur(20px);
+box-shadow: 0 0 40px rgba(123,47,247,.15);
+border-bottom: 1px solid var(–glass-border);
+}
+.nav-logo {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: clamp(.9rem, 2vw, 1.15rem);
+background: linear-gradient(135deg, var(–gold), var(–neon-purple));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+letter-spacing: .08em;
+white-space: nowrap;
+text-decoration: none;
+}
+.nav-links {
+display: flex;
+list-style: none;
+gap: 2rem;
+align-items: center;
+}
+.nav-links a {
+color: rgba(240,238,255,.7);
+text-decoration: none;
+font-size: .78rem;
+letter-spacing: .18em;
+text-transform: uppercase;
+font-weight: 500;
+position: relative;
+transition: color .3s;
+}
+.nav-links a::after {
+content:’’;
+position: absolute; bottom:-4px; left:0; right:0;
+height: 1px;
+background: linear-gradient(90deg, var(–neon-purple), var(–neon-blue));
+transform: scaleX(0);
+transition: transform .3s cubic-bezier(.4,0,.2,1);
+}
+.nav-links a:hover { color: var(–white); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+.btn-reservar-nav {
+background: linear-gradient(135deg, var(–purple), var(–purple-dim));
+border: 1px solid var(–neon-purple);
+color: var(–white) !important;
+padding: .45rem 1.2rem;
+border-radius: 4px;
+font-size: .75rem !important;
+letter-spacing: .18em;
+text-transform: uppercase;
+font-weight: 600;
+cursor: none;
+transition: all .3s !important;
+box-shadow: 0 0 20px rgba(191,95,255,.2);
+white-space: nowrap;
+}
+.btn-reservar-nav:hover {
+box-shadow: 0 0 35px rgba(191,95,255,.5), 0 0 60px rgba(191,95,255,.2) !important;
+transform: translateY(-1px);
+background: linear-gradient(135deg, var(–neon-purple), var(–purple)) !important;
+}
+.btn-reservar-nav::after { display:none !important; }
+
+.hamburger {
+display: none;
+flex-direction: column;
+gap: 5px;
+cursor: none;
+padding: 4px;
+}
+.hamburger span {
+display: block; width:24px; height:1.5px;
+background: var(–white);
+transition: transform .3s, opacity .3s;
+}
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(4.5px,-4.5px); }
+
+.mobile-menu {
+display: none;
+position: fixed;
+top: 72px; left:0; right:0;
+background: rgba(5,5,8,.97);
+backdrop-filter: blur(30px);
+border-bottom: 1px solid var(–glass-border);
+padding: 2rem 5%;
+flex-direction: column;
+gap: 1.5rem;
+z-index: 999;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+color: rgba(240,238,255,.8);
+text-decoration: none;
+font-size: .85rem;
+letter-spacing: .2em;
+text-transform: uppercase;
+font-weight: 500;
+padding: .5rem 0;
+border-bottom: 1px solid var(–glass-border);
+}
+
+/* ── HERO ── */
+#hero {
+min-height: 100vh;
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+}
+.hero-bg {
+position: absolute; inset:0;
+background:
+radial-gradient(ellipse 80% 60% at 50% 120%, rgba(123,47,247,.35) 0%, transparent 70%),
+radial-gradient(ellipse 50% 40% at 80% 10%, rgba(0,212,255,.12) 0%, transparent 60%),
+radial-gradient(ellipse 60% 50% at 10% 80%, rgba(201,168,76,.1) 0%, transparent 60%),
+linear-gradient(160deg, #0a0a12 0%, #050508 60%, #0d0518 100%);
+z-index: 1;
+}
+.hero-grid {
+position: absolute; inset:0;
+background-image:
+linear-gradient(rgba(123,47,247,.06) 1px, transparent 1px),
+linear-gradient(90deg, rgba(123,47,247,.06) 1px, transparent 1px);
+background-size: 60px 60px;
+z-index: 2;
+mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+.hero-content {
+position: relative; z-index: 5;
+text-align: center;
+padding: 0 5%;
+max-width: 900px;
+}
+.hero-eyebrow {
+font-size: .72rem;
+letter-spacing: .55em;
+text-transform: uppercase;
+color: var(–gold);
+font-weight: 500;
+margin-bottom: 1.5rem;
+opacity: 0;
+}
+.hero-title {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: clamp(2.2rem, 6vw, 5.5rem);
+line-height: 1.12;
+background: linear-gradient(135deg, #fff 0%, var(–neon-purple) 50%, var(–neon-blue) 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+margin-bottom: 1.5rem;
+opacity: 0;
+filter: drop-shadow(0 0 40px rgba(191,95,255,.3));
+}
+.hero-subtitle {
+font-family: ‘Cormorant Garamond’, serif;
+font-style: italic;
+font-size: clamp(1rem, 2.2vw, 1.45rem);
+color: rgba(240,238,255,.75);
+line-height: 1.7;
+margin-bottom: 3rem;
+font-weight: 300;
+opacity: 0;
+}
+.hero-buttons {
+display: flex;
+gap: 1.2rem;
+justify-content: center;
+flex-wrap: wrap;
+opacity: 0;
+}
+
+/* ── BUTTONS ── */
+.btn-primary {
+background: linear-gradient(135deg, var(–purple), #5a1fd1);
+border: 1px solid var(–neon-purple);
+color: var(–white);
+padding: .85rem 2.2rem;
+border-radius: 4px;
+font-size: .8rem;
+letter-spacing: .22em;
+text-transform: uppercase;
+font-weight: 600;
+cursor: none;
+text-decoration: none;
+display: inline-flex;
+align-items: center;
+gap: .6rem;
+transition: all .35s cubic-bezier(.4,0,.2,1);
+box-shadow: 0 0 30px rgba(191,95,255,.25), inset 0 1px 0 rgba(255,255,255,.1);
+position: relative;
+overflow: hidden;
+}
+.btn-primary::before {
+content:’’;
+position: absolute; inset:0;
+background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,.08));
+opacity: 0;
+transition: opacity .3s;
+}
+.btn-primary:hover {
+box-shadow: 0 0 50px rgba(191,95,255,.55), 0 0 100px rgba(191,95,255,.2);
+transform: translateY(-2px);
+}
+.btn-primary:hover::before { opacity:1; }
+
+.btn-secondary {
+background: transparent;
+border: 1px solid rgba(240,238,255,.25);
+color: var(–white);
+padding: .85rem 2.2rem;
+border-radius: 4px;
+font-size: .8rem;
+letter-spacing: .22em;
+text-transform: uppercase;
+font-weight: 600;
+cursor: none;
+text-decoration: none;
+display: inline-flex;
+align-items: center;
+gap: .6rem;
+transition: all .35s cubic-bezier(.4,0,.2,1);
+}
+.btn-secondary:hover {
+border-color: var(–neon-blue);
+color: var(–neon-blue);
+box-shadow: 0 0 30px rgba(0,212,255,.2);
+transform: translateY(-2px);
+}
+
+.hero-scroll-indicator {
+position: absolute;
+bottom: 2.5rem;
+left: 50%;
+transform: translateX(-50%);
+z-index: 5;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: .5rem;
+opacity: 0;
+}
+.hero-scroll-indicator span {
+font-size: .62rem;
+letter-spacing: .4em;
+color: rgba(240,238,255,.35);
+text-transform: uppercase;
+}
+.scroll-line {
+width: 1px; height: 50px;
+background: linear-gradient(var(–neon-purple), transparent);
+animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+0%,100% { opacity:.3; transform: scaleY(.6); }
+50% { opacity:1; transform: scaleY(1); }
+}
+
+/* ── NEON GLOW ELEMENTS ── */
+.neon-orb {
+position: absolute;
+border-radius: 50%;
+filter: blur(80px);
+pointer-events: none;
+}
+
+/* ── SECTION DEFAULTS ── */
+section { position: relative; z-index: 2; }
+
+.section-label {
+font-size: .68rem;
+letter-spacing: .55em;
+text-transform: uppercase;
+color: var(–gold);
+font-weight: 600;
+margin-bottom: .8rem;
+display: flex;
+align-items: center;
+gap: .8rem;
+}
+.section-label::before, .section-label::after {
+content:’’;
+flex:1;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(–gold), transparent);
+max-width: 60px;
+}
+.section-title {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: clamp(1.6rem, 3.5vw, 3rem);
+line-height: 1.2;
+margin-bottom: 1.5rem;
+}
+.section-sub {
+font-family: ‘Cormorant Garamond’, serif;
+font-style: italic;
+font-size: clamp(.95rem, 1.8vw, 1.2rem);
+color: rgba(240,238,255,.6);
+line-height: 1.8;
+font-weight: 300;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+
+/* ── SOBRE ── */
+#sobre { padding: 120px 0; }
+.sobre-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 80px;
+align-items: center;
+}
+.sobre-visual {
+position: relative;
+}
+.sobre-img-wrap {
+position: relative;
+border-radius: 2px;
+overflow: hidden;
+aspect-ratio: 4/5;
+}
+.sobre-img-bg {
+width: 100%;
+height: 100%;
+background:
+radial-gradient(ellipse at 30% 40%, rgba(123,47,247,.6) 0%, transparent 60%),
+radial-gradient(ellipse at 70% 70%, rgba(0,212,255,.3) 0%, transparent 50%),
+linear-gradient(160deg, #1a0d30 0%, #0d0518 50%, #0a1a2a 100%);
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.sobre-img-inner {
+text-align: center;
+padding: 2rem;
+}
+.sobre-img-icon {
+font-size: 5rem;
+display: block;
+margin-bottom: 1rem;
+filter: drop-shadow(0 0 20px rgba(191,95,255,.5));
+animation: iconFloat 4s ease-in-out infinite;
+}
+@keyframes iconFloat {
+0%,100% { transform: translateY(0); }
+50% { transform: translateY(-12px); }
+}
+.sobre-img-caption {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: .85rem;
+color: var(–gold);
+letter-spacing: .2em;
+}
+.sobre-img-wrap::before {
+content:’’;
+position: absolute; inset:-1px;
+border-radius: 2px;
+background: linear-gradient(135deg, var(–neon-purple), transparent, var(–neon-blue));
+padding: 1px;
+mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+mask-composite: exclude;
+z-index: 2;
+pointer-events: none;
+}
+.sobre-frame-deco {
+position: absolute;
+width: 100%; height: 100%;
+top: 16px; left: 16px;
+border: 1px solid rgba(201,168,76,.2);
+border-radius: 2px;
+z-index: -1;
+}
+.sobre-stats {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1rem;
+margin-top: 2.5rem;
+}
+.stat-card {
+background: var(–glass);
+border: 1px solid var(–glass-border);
+border-radius: 4px;
+padding: 1.2rem;
+text-align: center;
+backdrop-filter: blur(10px);
+transition: all .3s;
+}
+.stat-card:hover {
+border-color: var(–neon-purple);
+box-shadow: 0 0 20px rgba(191,95,255,.15);
+transform: translateY(-2px);
+}
+.stat-number {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 1.6rem;
+background: linear-gradient(135deg, var(–gold), var(–neon-purple));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+display: block;
+}
+.stat-label {
+font-size: .68rem;
+letter-spacing: .2em;
+text-transform: uppercase;
+color: rgba(240,238,255,.5);
+margin-top: .3rem;
+}
+.sobre-text p {
+color: rgba(240,238,255,.7);
+line-height: 1.9;
+font-size: .95rem;
+margin-bottom: 1.2rem;
+}
+
+/* ── EXPERIÊNCIA ── */
+#experiencia {
+padding: 120px 0;
+background: linear-gradient(160deg, rgba(123,47,247,.04) 0%, transparent 50%, rgba(0,212,255,.03) 100%);
+}
+.exp-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 1.5rem;
+margin-top: 4rem;
+}
+.exp-card {
+background: var(–glass);
+border: 1px solid var(–glass-border);
+border-radius: 6px;
+padding: 2.5rem 1.5rem;
+text-align: center;
+backdrop-filter: blur(12px);
+transition: all .4s cubic-bezier(.4,0,.2,1);
+position: relative;
+overflow: hidden;
+cursor: none;
+}
+.exp-card::before {
+content:’’;
+position: absolute; inset:0;
+background: linear-gradient(135deg, rgba(123,47,247,.08), transparent);
+opacity: 0;
+transition: opacity .4s;
+}
+.exp-card::after {
+content:’’;
+position: absolute; bottom:0; left:0; right:0;
+height: 2px;
+background: linear-gradient(90deg, var(–neon-purple), var(–neon-blue));
+transform: scaleX(0);
+transition: transform .4s cubic-bezier(.4,0,.2,1);
+}
+.exp-card:hover {
+border-color: rgba(191,95,255,.4);
+transform: translateY(-8px);
+box-shadow: 0 20px 60px rgba(0,0,0,.4), 0 0 40px rgba(191,95,255,.15);
+}
+.exp-card:hover::before { opacity:1; }
+.exp-card:hover::after { transform: scaleX(1); }
+.exp-icon {
+font-size: 2.8rem;
+display: block;
+margin-bottom: 1.2rem;
+transition: transform .4s, filter .4s;
+filter: drop-shadow(0 0 8px rgba(191,95,255,.2));
+}
+.exp-card:hover .exp-icon {
+transform: scale(1.2) translateY(-4px);
+filter: drop-shadow(0 0 20px rgba(191,95,255,.5));
+}
+.exp-title {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: .85rem;
+color: var(–white);
+margin-bottom: .6rem;
+letter-spacing: .05em;
+}
+.exp-desc {
+font-size: .8rem;
+color: rgba(240,238,255,.5);
+line-height: 1.6;
+}
+
+/* ── GALERIA ── */
+#galeria { padding: 120px 0; }
+.galeria-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+grid-template-rows: repeat(2, 260px);
+gap: 12px;
+margin-top: 4rem;
+}
+.galeria-item {
+position: relative;
+overflow: hidden;
+border-radius: 4px;
+cursor: none;
+border: 1px solid var(–glass-border);
+}
+.galeria-item:nth-child(1) { grid-column: span 2; }
+.galeria-item:nth-child(4) { grid-column: span 2; }
+
+.galeria-bg {
+width:100%; height:100%;
+transition: transform .6s cubic-bezier(.4,0,.2,1), filter .6s;
+}
+.galeria-item:hover .galeria-bg {
+transform: scale(1.08);
+filter: brightness(.7);
+}
+.galeria-overlay {
+position: absolute; inset:0;
+background: linear-gradient(135deg, rgba(123,47,247,.7), rgba(0,212,255,.4));
+opacity: 0;
+transition: opacity .4s;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+gap: .5rem;
+}
+.galeria-item:hover .galeria-overlay { opacity:1; }
+.galeria-overlay-icon { font-size: 2rem; }
+.galeria-overlay-text {
+font-size: .72rem;
+letter-spacing: .3em;
+text-transform: uppercase;
+color: rgba(255,255,255,.85);
+}
+.galeria-item::after {
+content:’’;
+position: absolute; inset:-1px;
+border: 1px solid transparent;
+border-radius: 4px;
+transition: border-color .4s, box-shadow .4s;
+pointer-events: none;
+}
+.galeria-item:hover::after {
+border-color: rgba(191,95,255,.5);
+box-shadow: 0 0 30px rgba(191,95,255,.2), inset 0 0 30px rgba(191,95,255,.05);
+}
+
+/* Lightbox */
+.lightbox {
+display: none;
+position: fixed; inset:0;
+background: rgba(5,5,8,.96);
+z-index: 10000;
+align-items: center;
+justify-content: center;
+backdrop-filter: blur(20px);
+}
+.lightbox.open { display:flex; }
+.lightbox-inner {
+position: relative;
+max-width: 90vw;
+max-height: 90vh;
+border-radius: 4px;
+overflow: hidden;
+border: 1px solid rgba(191,95,255,.3);
+box-shadow: 0 0 80px rgba(191,95,255,.25);
+}
+.lightbox-inner div {
+min-width: 400px;
+min-height: 300px;
+}
+.lightbox-close {
+position: absolute; top:1rem; right:1rem;
+background: rgba(5,5,8,.8);
+border: 1px solid var(–glass-border);
+color: var(–white);
+width: 36px; height:36px;
+border-radius: 50%;
+cursor: none;
+font-size: 1rem;
+display: flex; align-items:center; justify-content:center;
+transition: all .3s;
+}
+.lightbox-close:hover {
+border-color: var(–neon-purple);
+box-shadow: 0 0 20px rgba(191,95,255,.3);
+}
+
+/* ── AVALIAÇÕES ── */
+#avaliacoes {
+padding: 120px 0;
+background: linear-gradient(160deg, rgba(0,212,255,.03) 0%, transparent 40%);
+}
+.avaliacoes-carousel {
+position: relative;
+overflow: hidden;
+margin-top: 4rem;
+}
+.avaliacoes-track {
+display: flex;
+gap: 1.5rem;
+transition: transform .6s cubic-bezier(.4,0,.2,1);
+}
+.avaliacao-card {
+background: var(–glass);
+border: 1px solid var(–glass-border);
+border-radius: 8px;
+padding: 2rem;
+min-width: 340px;
+flex-shrink: 0;
+backdrop-filter: blur(16px);
+transition: all .4s;
+position: relative;
+overflow: hidden;
+}
+.avaliacao-card::before {
+content:’”’;
+position: absolute;
+top: -.5rem; left: 1.2rem;
+font-size: 5rem;
+font-family: ‘Cormorant Garamond’, serif;
+color: var(–purple);
+opacity: .3;
+line-height: 1;
+}
+.avaliacao-card::after {
+content:’’;
+position: absolute; inset:0;
+background: linear-gradient(135deg, rgba(123,47,247,.06), transparent);
+opacity: 0;
+transition: opacity .4s;
+pointer-events: none;
+}
+.avaliacao-card:hover {
+border-color: rgba(191,95,255,.3);
+box-shadow: 0 0 40px rgba(191,95,255,.1);
+transform: translateY(-4px);
+}
+.avaliacao-card:hover::after { opacity:1; }
+.stars {
+color: var(–gold);
+font-size: 1rem;
+letter-spacing: .1em;
+margin-bottom: 1rem;
+}
+.avaliacao-text {
+font-family: ‘Cormorant Garamond’, serif;
+font-style: italic;
+font-size: 1.05rem;
+color: rgba(240,238,255,.8);
+line-height: 1.8;
+margin-bottom: 1.5rem;
+font-weight: 300;
+}
+.avaliacao-author {
+display: flex;
+align-items: center;
+gap: .8rem;
+}
+.author-avatar {
+width: 40px; height: 40px;
+border-radius: 50%;
+display: flex; align-items:center; justify-content:center;
+font-size: 1.1rem;
+background: linear-gradient(135deg, var(–purple-dim), var(–neon-blue));
+border: 1px solid rgba(191,95,255,.3);
+}
+.author-name {
+font-size: .82rem;
+font-weight: 600;
+color: var(–white);
+}
+.author-meta {
+font-size: .68rem;
+color: rgba(240,238,255,.4);
+margin-top: .15rem;
+letter-spacing: .1em;
+}
+.carousel-controls {
+display: flex;
+justify-content: center;
+gap: .8rem;
+margin-top: 2.5rem;
+}
+.carousel-btn {
+width: 44px; height:44px;
+border-radius: 50%;
+border: 1px solid var(–glass-border);
+background: var(–glass);
+color: var(–white);
+cursor: none;
+display: flex; align-items:center; justify-content:center;
+font-size: 1rem;
+transition: all .3s;
+backdrop-filter: blur(8px);
+}
+.carousel-btn:hover {
+border-color: var(–neon-purple);
+box-shadow: 0 0 20px rgba(191,95,255,.3);
+background: rgba(123,47,247,.15);
+}
+.carousel-dots {
+display: flex;
+justify-content: center;
+gap: .5rem;
+margin-top: 1rem;
+}
+.dot {
+width:6px; height:6px;
+border-radius: 3px;
+background: rgba(240,238,255,.2);
+cursor: none;
+transition: all .3s;
+}
+.dot.active {
+width: 24px;
+background: var(–neon-purple);
+box-shadow: 0 0 10px rgba(191,95,255,.5);
+}
+
+/* ── RESERVA ── */
+#reserva {
+padding: 120px 0;
+}
+.reserva-wrap {
+background: var(–glass);
+border: 1px solid var(–glass-border);
+border-radius: 8px;
+padding: clamp(2rem, 5vw, 4rem);
+backdrop-filter: blur(20px);
+position: relative;
+overflow: hidden;
+max-width: 700px;
+margin: 0 auto;
+}
+.reserva-wrap::before {
+content:’’;
+position: absolute; top:-1px; left:-1px; right:-1px;
+height: 2px;
+background: linear-gradient(90deg, var(–purple), var(–neon-blue), var(–gold));
+border-radius: 8px 8px 0 0;
+}
+.reserva-glow {
+position: absolute;
+width: 400px; height:400px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(123,47,247,.15), transparent 70%);
+top: -200px; right: -200px;
+pointer-events: none;
+}
+.form-row {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1rem;
+}
+.form-group {
+margin-bottom: 1.2rem;
+}
+.form-label {
+display: block;
+font-size: .72rem;
+letter-spacing: .25em;
+text-transform: uppercase;
+color: rgba(240,238,255,.5);
+margin-bottom: .5rem;
+font-weight: 600;
+}
+.form-input {
+width:100%;
+background: rgba(255,255,255,.04);
+border: 1px solid var(–glass-border);
+border-radius: 4px;
+padding: .85rem 1rem;
+color: var(–white);
+font-family: ‘Raleway’, sans-serif;
+font-size: .88rem;
+transition: all .3s;
+outline: none;
+cursor: none;
+}
+.form-input:focus {
+border-color: var(–neon-purple);
+background: rgba(123,47,247,.06);
+box-shadow: 0 0 20px rgba(191,95,255,.1);
+}
+.form-input::placeholder { color: rgba(240,238,255,.25); }
+.form-input option { background: var(–deep); }
+
+.btn-submit {
+width:100%;
+background: linear-gradient(135deg, var(–purple), #5a1fd1);
+border: 1px solid var(–neon-purple);
+color: var(–white);
+padding: 1rem 2rem;
+border-radius: 4px;
+font-family: ‘Raleway’, sans-serif;
+font-size: .82rem;
+letter-spacing: .25em;
+text-transform: uppercase;
+font-weight: 700;
+cursor: none;
+transition: all .35s cubic-bezier(.4,0,.2,1);
+box-shadow: 0 0 30px rgba(191,95,255,.25);
+display: flex;
+align-items: center;
+justify-content: center;
+gap: .8rem;
+margin-top: .5rem;
+position: relative;
+overflow: hidden;
+}
+.btn-submit::before {
+content:’’;
+position: absolute; top:0; left:-100%;
+width:100%; height:100%;
+background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+transition: left .5s;
+}
+.btn-submit:hover {
+box-shadow: 0 0 60px rgba(191,95,255,.5), 0 0 100px rgba(191,95,255,.2);
+transform: translateY(-2px);
+}
+.btn-submit:hover::before { left:100%; }
+
+.reserva-note {
+text-align: center;
+font-size: .72rem;
+color: rgba(240,238,255,.35);
+margin-top: 1rem;
+letter-spacing: .1em;
+}
+.wpp-badge {
+display: inline-flex;
+align-items: center;
+gap: .4rem;
+color: #25d366;
+font-weight: 600;
+}
+
+/* ── CONTATO ── */
+#contato {
+padding: 120px 0;
+background: linear-gradient(160deg, rgba(123,47,247,.04) 0%, transparent 60%);
+}
+.contato-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 60px;
+align-items: start;
+}
+.contato-info-item {
+display: flex;
+gap: 1.2rem;
+align-items: flex-start;
+margin-bottom: 2rem;
+padding: 1.5rem;
+background: var(–glass);
+border: 1px solid var(–glass-border);
+border-radius: 6px;
+backdrop-filter: blur(8px);
+transition: all .3s;
+}
+.contato-info-item:hover {
+border-color: rgba(191,95,255,.3);
+box-shadow: 0 0 20px rgba(191,95,255,.08);
+transform: translateX(4px);
+}
+.info-icon {
+font-size: 1.5rem;
+flex-shrink: 0;
+filter: drop-shadow(0 0 8px rgba(191,95,255,.4));
+}
+.info-label {
+font-size: .68rem;
+letter-spacing: .25em;
+text-transform: uppercase;
+color: var(–gold);
+font-weight: 600;
+margin-bottom: .3rem;
+}
+.info-value {
+font-size: .9rem;
+color: rgba(240,238,255,.8);
+line-height: 1.6;
+}
+.info-value a {
+color: rgba(240,238,255,.8);
+text-decoration: none;
+transition: color .3s;
+}
+.info-value a:hover { color: var(–neon-blue); }
+
+.map-container {
+border-radius: 6px;
+overflow: hidden;
+border: 1px solid var(–glass-border);
+aspect-ratio: 4/3;
+position: relative;
+background: linear-gradient(160deg, #0f0a20, #0a1520);
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.map-placeholder {
+text-align: center;
+}
+.map-placeholder iframe {
+width:100%; height:100%;
+position: absolute; inset:0;
+border:none;
+filter: grayscale(.8) invert(1) hue-rotate(180deg) brightness(.7);
+}
+.btn-directions {
+display: inline-flex;
+align-items: center;
+gap: .5rem;
+margin-top: 1rem;
+background: transparent;
+border: 1px solid rgba(0,212,255,.3);
+color: var(–neon-blue);
+padding: .6rem 1.2rem;
+border-radius: 4px;
+font-size: .72rem;
+letter-spacing: .2em;
+text-transform: uppercase;
+font-weight: 600;
+cursor: none;
+text-decoration: none;
+transition: all .3s;
+}
+.btn-directions:hover {
+background: rgba(0,212,255,.08);
+box-shadow: 0 0 20px rgba(0,212,255,.2);
+}
+
+/* ── FOOTER ── */
+footer {
+border-top: 1px solid var(–glass-border);
+padding: 3rem 0 2rem;
+text-align: center;
+position: relative;
+z-index: 2;
+}
+.footer-logo {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 1.2rem;
+background: linear-gradient(135deg, var(–gold), var(–neon-purple));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+margin-bottom: 1.5rem;
+display: block;
+}
+.footer-phrase {
+font-family: ‘Cormorant Garamond’, serif;
+font-style: italic;
+font-size: 1.05rem;
+color: rgba(240,238,255,.4);
+margin-bottom: 1.5rem;
+}
+.social-links {
+display: flex;
+justify-content: center;
+gap: 1rem;
+margin-bottom: 2rem;
+}
+.social-link {
+width: 40px; height:40px;
+border-radius: 50%;
+border: 1px solid var(–glass-border);
+background: var(–glass);
+display: flex; align-items:center; justify-content:center;
+font-size: .9rem;
+color: rgba(240,238,255,.6);
+text-decoration: none;
+cursor: none;
+transition: all .3s;
+backdrop-filter: blur(8px);
+}
+.social-link:hover {
+border-color: var(–neon-purple);
+color: var(–white);
+box-shadow: 0 0 20px rgba(191,95,255,.3);
+transform: translateY(-2px);
+}
+.footer-copy {
+font-size: .7rem;
+color: rgba(240,238,255,.25);
+letter-spacing: .15em;
+}
+
+/* ── FLOATING BUTTONS ── */
+.whatsapp-float {
+position: fixed;
+bottom: 2rem; right: 2rem;
+z-index: 500;
+width: 58px; height:58px;
+border-radius: 50%;
+background: #25d366;
+display: flex; align-items:center; justify-content:center;
+font-size: 1.6rem;
+box-shadow: 0 4px 20px rgba(37,211,102,.4);
+cursor: none;
+text-decoration: none;
+transition: all .3s;
+animation: wppPulse 3s ease-in-out infinite;
+}
+@keyframes wppPulse {
+0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,.4); }
+50% { box-shadow: 0 4px 40px rgba(37,211,102,.6), 0 0 0 12px rgba(37,211,102,.08); }
+}
+.whatsapp-float:hover {
+transform: scale(1.1) translateY(-2px);
+box-shadow: 0 8px 30px rgba(37,211,102,.6);
+}
+
+.back-to-top {
+position: fixed;
+bottom: 2rem; left: 2rem;
+z-index: 500;
+width: 44px; height:44px;
+border-radius: 50%;
+background: var(–glass);
+border: 1px solid var(–glass-border);
+color: var(–white);
+display: flex; align-items:center; justify-content:center;
+font-size: .9rem;
+cursor: none;
+text-decoration: none;
+transition: all .3s;
+backdrop-filter: blur(8px);
+opacity: 0;
+pointer-events: none;
+}
+.back-to-top.visible {
+opacity:1;
+pointer-events: all;
+}
+.back-to-top:hover {
+border-color: var(–neon-purple);
+box-shadow: 0 0 20px rgba(191,95,255,.3);
+transform: translateY(-2px);
+}
+
+/* Music toggle */
+.music-toggle {
+position: fixed;
+top: 90px; right: 1.5rem;
+z-index: 500;
+width: 40px; height:40px;
+border-radius: 50%;
+background: rgba(5,5,8,.8);
+border: 1px solid var(–glass-border);
+color: rgba(240,238,255,.6);
+display: flex; align-items:center; justify-content:center;
+font-size: .85rem;
+cursor: none;
+transition: all .3s;
+backdrop-filter: blur(8px);
+}
+.music-toggle.playing {
+border-color: var(–neon-purple);
+color: var(–neon-purple);
+box-shadow: 0 0 15px rgba(191,95,255,.2);
+animation: musicPulse 1.5s ease-in-out infinite;
+}
+@keyframes musicPulse {
+0%,100% { box-shadow: 0 0 15px rgba(191,95,255,.2); }
+50% { box-shadow: 0 0 30px rgba(191,95,255,.4); }
+}
+
+/* Divider */
+.divider {
+height: 1px;
+background: linear-gradient(90deg, transparent, rgba(191,95,255,.2), transparent);
+margin: 0;
+}
+
+/* ── Gradient backgrounds for gallery items ── */
+.g1 { background: radial-gradient(ellipse at 30% 50%, rgba(123,47,247,.7), rgba(0,0,10,.9)), repeating-linear-gradient(45deg, rgba(255,255,255,.02) 0, rgba(255,255,255,.02) 1px, transparent 1px, transparent 10px); }
+.g2 { background: radial-gradient(ellipse at 70% 30%, rgba(0,212,255,.5), rgba(0,0,10,.9)), repeating-linear-gradient(-45deg, rgba(255,255,255,.02) 0, rgba(255,255,255,.02) 1px, transparent 1px, transparent 10px); }
+.g3 { background: radial-gradient(ellipse at 50% 80%, rgba(201,168,76,.4), rgba(0,0,10,.9)), radial-gradient(ellipse at 20% 20%, rgba(123,47,247,.3), transparent 50%); }
+.g4 { background: radial-gradient(ellipse at 20% 50%, rgba(191,95,255,.5), rgba(0,0,10,.9)), radial-gradient(ellipse at 80% 80%, rgba(0,212,255,.3), transparent 50%); }
+.g5 { background: radial-gradient(ellipse at 80% 20%, rgba(201,168,76,.5), rgba(0,0,10,.9)), radial-gradient(ellipse at 20% 70%, rgba(123,47,247,.4), transparent 60%); }
+
+.gallery-scene-text {
+position: absolute;
+bottom: 1.5rem; left: 1.5rem;
+z-index: 3;
+}
+.gallery-scene-label {
+font-size: .62rem;
+letter-spacing: .35em;
+text-transform: uppercase;
+color: rgba(240,238,255,.5);
+}
+.gallery-scene-title {
+font-family: ‘Cinzel Decorative’, serif;
+font-size: 1rem;
+color: var(–white);
+text-shadow: 0 0 20px rgba(191,95,255,.5);
+}
+.gallery-icon {
+position: absolute;
+top: 50%; left: 50%;
+transform: translate(-50%, -50%);
+font-size: 4rem;
+filter: drop-shadow(0 0 20px rgba(255,255,255,.2));
+transition: transform .4s, filter .4s;
+z-index: 2;
+}
+.galeria-item:hover .gallery-icon {
+transform: translate(-50%, -50%) scale(1.15);
+filter: drop-shadow(0 0 30px rgba(191,95,255,.6));
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+.nav-links { display:none; }
+.hamburger { display:flex; }
+.sobre-grid { grid-template-columns:1fr; gap:40px; }
+.contato-grid { grid-template-columns:1fr; gap:40px; }
+.galeria-grid {
+grid-template-columns: 1fr 1fr;
+grid-template-rows: auto;
+}
+.galeria-item:nth-child(1),
+.galeria-item:nth-child(4) { grid-column: span 1; }
+.form-row { grid-template-columns:1fr; }
+}
+@media (max-width: 600px) {
+.galeria-grid { grid-template-columns:1fr; }
+.galeria-item { height: 220px; }
+.avaliacao-card { min-width: 280px; }
+.exp-grid { grid-template-columns: 1fr 1fr; }
+.sobre-stats { grid-template-columns:1fr 1fr; }
+}
+
+/* Neon text glow utility */
+.glow-purple { text-shadow: 0 0 20px rgba(191,95,255,.6), 0 0 40px rgba(191,95,255,.3); }
+.glow-blue { text-shadow: 0 0 20px rgba(0,212,255,.6); }
+.glow-gold { text-shadow: 0 0 20px rgba(201,168,76,.6); }
+</style>
+
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- LOADER -->
+
+<div id="loader">
+  <div class="loader-logo" id="loaderLogo">Espaço Dlevis</div>
+  <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+  <div class="loader-text" id="loaderText">Preparando sua experiência...</div>
+</div>
+
+<!-- PARTICLES -->
+
+<canvas id="particles-canvas"></canvas>
+
+<!-- MUSIC TOGGLE -->
+
+<button class="music-toggle" id="musicToggle" title="Música ambiente">🎵</button>
+
+<!-- WHATSAPP FLOAT -->
+
+<a href="https://wa.me/5541995459915" target="_blank" class="whatsapp-float" title="WhatsApp">💬</a>
+
+<!-- BACK TO TOP -->
+
+<a href="#hero" class="back-to-top" id="backToTop">↑</a>
+
+<!-- NAV -->
+
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Espaço Dlevis</a>
+  <ul class="nav-links">
+    <li><a href="#hero">Início</a></li>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#experiencia">Experiência</a></li>
+    <li><a href="#galeria">Galeria</a></li>
+    <li><a href="#avaliacoes">Avaliações</a></li>
+    <li><a href="#contato">Contato</a></li>
+    <li><a href="#reserva" class="btn-reservar-nav">Reservar Mesa</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hero" onclick="closeMobileMenu()">Início</a>
+  <a href="#sobre" onclick="closeMobileMenu()">Sobre</a>
+  <a href="#experiencia" onclick="closeMobileMenu()">Experiência</a>
+  <a href="#galeria" onclick="closeMobileMenu()">Galeria</a>
+  <a href="#avaliacoes" onclick="closeMobileMenu()">Avaliações</a>
+  <a href="#contato" onclick="closeMobileMenu()">Contato</a>
+  <a href="#reserva" onclick="closeMobileMenu()" style="color:var(--neon-purple)">✦ Reservar Mesa</a>
+</div>
+
+<!-- HERO -->
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <!-- Neon orbs -->
+
+  <div class="neon-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(123,47,247,.18),transparent 70%);top:10%;left:-10%;animation:orbFloat1 12s ease-in-out infinite;"></div>
+  <div class="neon-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(0,212,255,.1),transparent 70%);bottom:0%;right:-5%;animation:orbFloat2 10s ease-in-out infinite;"></div>
+  <div class="neon-orb" style="width:300px;height:300px;background:radial-gradient(circle,rgba(201,168,76,.1),transparent 70%);top:60%;left:60%;animation:orbFloat3 14s ease-in-out infinite;"></div>
+
+  <div class="smoke-layer" id="smokeLayer"></div>
+
+  <div class="hero-content" id="heroContent">
+    <p class="hero-eyebrow" id="heroEyebrow">✦ Pinhais · Paraná · Brasil ✦</p>
+    <h1 class="hero-title" id="heroTitle">A Melhor Experiência Noturna de Pinhais</h1>
+    <p class="hero-subtitle" id="heroSubtitle">Narguilé de qualidade, bebidas geladas e um ambiente que você vai querer voltar.<br>Uma noite inesquecível começa aqui.</p>
+    <div class="hero-buttons" id="heroButtons">
+      <a href="#reserva" class="btn-primary">✦ Reservar Agora</a>
+      <a href="#galeria" class="btn-secondary">◎ Ver Ambiente</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll-indicator" id="heroScroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOBRE -->
+
+<section id="sobre">
+  <div class="container">
+    <div class="sobre-grid">
+      <div class="sobre-visual" data-aos="fade-right" data-aos-duration="1000">
+        <div class="sobre-img-wrap">
+          <div class="sobre-img-bg">
+            <div class="sobre-img-inner">
+              <span class="sobre-img-icon">🌙</span>
+              <span class="sobre-img-caption">Desde o Primeiro Gole</span>
+            </div>
+          </div>
+        </div>
+        <div class="sobre-frame-deco"></div>
+        <div class="sobre-stats" data-aos="fade-up" data-aos-delay="200">
+          <div class="stat-card">
+            <span class="stat-number">⭐ 5.0</span>
+            <span class="stat-label">Avaliação Google</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">02:30</span>
+            <span class="stat-label">Até às 2h30</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Satisfação</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">🏆</span>
+            <span class="stat-label">Top Pinhais</span>
+          </div>
+        </div>
+      </div>
+
+```
+  <div class="sobre-text" data-aos="fade-left" data-aos-duration="1000">
+    <p class="section-label">Sobre o Espaço</p>
+    <h2 class="section-title">Um Lugar <span style="background:linear-gradient(135deg,var(--neon-purple),var(--neon-blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Criado para Você</span></h2>
+    <p class="section-sub">Onde cada detalhe foi pensado para proporcionar a melhor experiência da noite.</p>
+    <br>
+    <p>O <strong style="color:var(--gold)">Espaço Dlevis Lounge & Bar</strong> é mais do que um bar — é um refúgio noturno onde a sofisticação encontra o conforto. Localizado no coração de Pinhais, criamos um ambiente pensado para momentos especiais.</p>
+    <p>Nossa proposta é simples: <em style="color:var(--neon-purple)">oferecer o melhor</em>. Narguilé premium, bebidas selecionadas, música no ponto certo e um atendimento que faz você se sentir especial desde o primeiro momento.</p>
+    <p>Seja para celebrar com amigos, curtir com a família ou simplesmente aproveitar uma noite diferente — aqui você vai querer voltar sempre.</p>
+    <br>
+    <a href="#reserva" class="btn-primary" style="display:inline-flex">✦ Reservar Minha Mesa</a>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIÊNCIA -->
+
+<section id="experiencia">
+  <div class="container">
+    <div style="text-align:center" data-aos="fade-up">
+      <p class="section-label" style="justify-content:center">Diferenciais</p>
+      <h2 class="section-title">Nossa <span style="background:linear-gradient(135deg,var(--gold),var(--neon-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Experiência</span></h2>
+      <p class="section-sub" style="max-width:540px;margin:0 auto">Cada elemento do Dlevis foi desenhado para elevar sua noite a outro nível.</p>
+    </div>
+    <div class="exp-grid">
+      <div class="exp-card" data-aos="fade-up" data-aos-delay="0">
+        <span class="exp-icon">💨</span>
+        <h3 class="exp-title">Narguilé Premium</h3>
+        <p class="exp-desc">Narguilés preparados com cuidado, sabores exclusivos e fumaça densa que cria a atmosfera perfeita.</p>
+      </div>
+      <div class="exp-card" data-aos="fade-up" data-aos-delay="80">
+        <span class="exp-icon">🍺</span>
+        <h3 class="exp-title">Bebidas Geladas</h3>
+        <p class="exp-desc">Cardápio completo com cervejas artesanais, drinks autorais e opções para todos os gostos.</p>
+      </div>
+      <div class="exp-card" data-aos="fade-up" data-aos-delay="160">
+        <span class="exp-icon">🎶</span>
+        <h3 class="exp-title">Música & Vibe</h3>
+        <p class="exp-desc">Curadoria musical que define o ritmo perfeito para sua noite — do lounge ao animado.</p>
+      </div>
+      <div class="exp-card" data-aos="fade-up" data-aos-delay="240">
+        <span class="exp-icon">🛋️</span>
+        <h3 class="exp-title">Conforto Total</h3>
+        <p class="exp-desc">Espaço aconchegante e bem decorado para você relaxar, conversar e curtir à vontade.</p>
+      </div>
+      <div class="exp-card" data-aos="fade-up" data-aos-delay="320">
+        <span class="exp-icon">🔥</span>
+        <h3 class="exp-title">Ambiente Noturno</h3>
+        <p class="exp-desc">Iluminação e decoração que transformam cada visita em uma experiência visualmente incrível.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- GALERIA -->
+
+<section id="galeria">
+  <div class="container">
+    <div style="text-align:center" data-aos="fade-up">
+      <p class="section-label" style="justify-content:center">Galeria</p>
+      <h2 class="section-title">Veja o <span style="background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Ambiente</span></h2>
+      <p class="section-sub" style="max-width:500px;margin:0 auto">Um espaço que você precisa ver para acreditar.</p>
+    </div>
+    <div class="galeria-grid" style="margin-top:3rem">
+      <div class="galeria-item" data-aos="fade-up" data-aos-delay="0" onclick="openLightbox(0)">
+        <div class="galeria-bg g1">
+          <div class="gallery-icon">💨</div>
+          <div class="gallery-scene-text">
+            <div class="gallery-scene-label">Destaque</div>
+            <div class="gallery-scene-title">Narguilé Premium</div>
+          </div>
+        </div>
+        <div class="galeria-overlay">
+          <span class="galeria-overlay-icon">🔍</span>
+          <span class="galeria-overlay-text">Ver Mais</span>
+        </div>
+      </div>
+      <div class="galeria-item" data-aos="fade-up" data-aos-delay="80" onclick="openLightbox(1)">
+        <div class="galeria-bg g2">
+          <div class="gallery-icon">🍸</div>
+          <div class="gallery-scene-text">
+            <div class="gallery-scene-label">Bar</div>
+            <div class="gallery-scene-title">Drinks & Coquetéis</div>
+          </div>
+        </div>
+        <div class="galeria-overlay">
+          <span class="galeria-overlay-icon">🔍</span>
+          <span class="galeria-overlay-text">Ver Mais</span>
+        </div>
+      </div>
+      <div class="galeria-item" data-aos="fade-up" data-aos-delay="160" onclick="openLightbox(2)">
+        <div class="galeria-bg g3">
+          <div class="gallery-icon">✨</div>
+          <div class="gallery-scene-text">
+            <div class="gallery-scene-label">Ambiente</div>
+            <div class="gallery-scene-title">Iluminação Premium</div>
+          </div>
+        </div>
+        <div class="galeria-overlay">
+          <span class="galeria-overlay-icon">🔍</span>
+          <span class="galeria-overlay-text">Ver Mais</span>
+        </div>
+      </div>
+      <div class="galeria-item" data-aos="fade-up" data-aos-delay="240" onclick="openLightbox(3)">
+        <div class="galeria-bg g4">
+          <div class="gallery-icon">🎶</div>
+          <div class="gallery-scene-text">
+            <div class="gallery-scene-label">Música</div>
+            <div class="gallery-scene-title">Noite de Lounge</div>
+          </div>
+        </div>
+        <div class="galeria-overlay">
+          <span class="galeria-overlay-icon">🔍</span>
+          <span class="galeria-overlay-text">Ver Mais</span>
+        </div>
+      </div>
+      <div class="galeria-item" data-aos="fade-up" data-aos-delay="320" onclick="openLightbox(4)">
+        <div class="galeria-bg g5">
+          <div class="gallery-icon">🏆</div>
+          <div class="gallery-scene-text">
+            <div class="gallery-scene-label">Social</div>
+            <div class="gallery-scene-title">Momentos Especiais</div>
+          </div>
+        </div>
+        <div class="galeria-overlay">
+          <span class="galeria-overlay-icon">🔍</span>
+          <span class="galeria-overlay-text">Ver Mais</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <div id="lightboxContent" style="min-width:500px;min-height:380px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;padding:3rem;"></div>
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- AVALIAÇÕES -->
+
+<section id="avaliacoes">
+  <div class="container">
+    <div style="text-align:center" data-aos="fade-up">
+      <p class="section-label" style="justify-content:center">Clientes Felizes</p>
+      <h2 class="section-title">O Que Dizem <span style="background:linear-gradient(135deg,var(--gold),var(--neon-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Sobre Nós</span></h2>
+      <p class="section-sub" style="max-width:500px;margin:0 auto">Avaliação perfeita no Google. Veja o que nossos clientes falam.</p>
+    </div>
+    <div class="avaliacoes-carousel" data-aos="fade-up" data-aos-delay="100">
+      <div class="avaliacoes-track" id="carouselTrack">
+        <div class="avaliacao-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p class="avaliacao-text">Atendimento top! O pessoal é super atencioso e o lugar é muito confortável. Com certeza voltarei muitas vezes.</p>
+          <div class="avaliacao-author">
+            <div class="author-avatar">😊</div>
+            <div>
+              <div class="author-name">Ana Paula S.</div>
+              <div class="author-meta">Via Google · Pinhais, PR</div>
+            </div>
+          </div>
+        </div>
+        <div class="avaliacao-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p class="avaliacao-text">Ambiente muito agradável e tranquilo, perfeito para sair com a família. Narguilé de qualidade e bebidas sempre geladas!</p>
+          <div class="avaliacao-author">
+            <div class="author-avatar">🙌</div>
+            <div>
+              <div class="author-name">Carlos R.</div>
+              <div class="author-meta">Via Google · Pinhais, PR</div>
+            </div>
+          </div>
+        </div>
+        <div class="avaliacao-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p class="avaliacao-text">Lugar organizado, limpo e com ótimo atendimento. O ambiente noturno é incrível, super recomendo para quem quer curtir bem!</p>
+          <div class="avaliacao-author">
+            <div class="author-avatar">🎉</div>
+            <div>
+              <div class="author-name">Fernanda L.</div>
+              <div class="author-meta">Via Google · Pinhais, PR</div>
+            </div>
+          </div>
+        </div>
+        <div class="avaliacao-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p class="avaliacao-text">Fui com os amigos e foi uma noite incrível! Voltarei com certeza. Atendimento excelente e o espaço é muito bem cuidado.</p>
+          <div class="avaliacao-author">
+            <div class="author-avatar">🔥</div>
+            <div>
+              <div class="author-name">Rodrigo M.</div>
+              <div class="author-meta">Via Google · Curitiba, PR</div>
+            </div>
+          </div>
+        </div>
+        <div class="avaliacao-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p class="avaliacao-text">Melhor lounge da região! Narguilé preparado com cuidado, ambiente sofisticado e uma vibe incrível. Lugar diferenciado mesmo.</p>
+          <div class="avaliacao-author">
+            <div class="author-avatar">💎</div>
+            <div>
+              <div class="author-name">Juliana K.</div>
+              <div class="author-meta">Via Google · Pinhais, PR</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" onclick="prevSlide()">←</button>
+      <button class="carousel-btn" onclick="nextSlide()">→</button>
+    </div>
+    <div class="carousel-dots" id="carouselDots">
+      <div class="dot active" onclick="goToSlide(0)"></div>
+      <div class="dot" onclick="goToSlide(1)"></div>
+      <div class="dot" onclick="goToSlide(2)"></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RESERVA -->
+
+<section id="reserva" style="padding:120px 0;">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3rem" data-aos="fade-up">
+      <p class="section-label" style="justify-content:center">Reserve já</p>
+      <h2 class="section-title">Garanta Sua <span style="background:linear-gradient(135deg,var(--neon-purple),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Mesa</span></h2>
+      <p class="section-sub" style="max-width:480px;margin:0 auto">Não perca sua vaga. Reserve agora e chegue sem preocupação.</p>
+    </div>
+    <div class="reserva-wrap" data-aos="fade-up" data-aos-delay="100">
+      <div class="reserva-glow"></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Seu Nome</label>
+          <input type="text" class="form-input" placeholder="Como podemos te chamar?" id="formNome">
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp</label>
+          <input type="tel" class="form-input" placeholder="(41) 9 0000-0000" id="formWpp">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Data da Visita</label>
+          <input type="date" class="form-input" id="formData">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Número de Pessoas</label>
+          <select class="form-input" id="formPessoas">
+            <option value="">Quantas pessoas?</option>
+            <option>1 pessoa</option>
+            <option>2 pessoas</option>
+            <option>3 pessoas</option>
+            <option>4 pessoas</option>
+            <option>5 pessoas</option>
+            <option>6+ pessoas</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Horário Preferido</label>
+        <select class="form-input" id="formHorario">
+          <option value="">Selecione o horário</option>
+          <option>19:00 - 20:00</option>
+          <option>20:00 - 21:00</option>
+          <option>21:00 - 22:00</option>
+          <option>22:00 - 23:00</option>
+          <option>23:00 - 00:00</option>
+          <option>00:00 - 01:00</option>
+          <option>01:00 - 02:30</option>
+        </select>
+      </div>
+      <button class="btn-submit" onclick="sendReservation()">
+        <span>💬</span>
+        <span>Reservar via WhatsApp</span>
+      </button>
+      <p class="reserva-note">
+        Você será redirecionado para o <span class="wpp-badge">💬 WhatsApp</span> para confirmar sua reserva.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTATO -->
+
+<section id="contato">
+  <div class="container">
+    <div data-aos="fade-up" style="margin-bottom:3rem">
+      <p class="section-label">Venha nos visitar</p>
+      <h2 class="section-title">Onde Estamos <span style="background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">&</span> Contato</h2>
+    </div>
+    <div class="contato-grid">
+      <div data-aos="fade-right">
+        <div class="contato-info-item">
+          <span class="info-icon">📍</span>
+          <div>
+            <div class="info-label">Endereço</div>
+            <div class="info-value">Av. Iraí, 519<br>Pinhais · Paraná · Brasil</div>
+          </div>
+        </div>
+        <div class="contato-info-item">
+          <span class="info-icon">📱</span>
+          <div>
+            <div class="info-label">Telefone & WhatsApp</div>
+            <div class="info-value"><a href="tel:+5541995459915">(41) 99545-9915</a></div>
+          </div>
+        </div>
+        <div class="contato-info-item">
+          <span class="info-icon">🕐</span>
+          <div>
+            <div class="info-label">Horário de Funcionamento</div>
+            <div class="info-value">Terça a Domingo<br>A partir das 19:00 até as 02:30</div>
+          </div>
+        </div>
+        <div class="contato-info-item">
+          <span class="info-icon">🌐</span>
+          <div>
+            <div class="info-label">Redes Sociais</div>
+            <div class="info-value">@espacodlevis</div>
+          </div>
+        </div>
+        <a href="https://wa.me/5541995459915" target="_blank" class="btn-primary" style="margin-top:.5rem">💬 Falar no WhatsApp</a>
+      </div>
+      <div data-aos="fade-left">
+        <div class="map-container">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3600.3!2d-49.19!3d-25.43!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDI1JzQ4LjAiUyA0OcKwMTEnMjQuMCJX!5e0!3m2!1spt-BR!2sbr!4v1"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Localização Espaço Dlevis"
+          ></iframe>
+        </div>
+        <div style="text-align:center;margin-top:1rem">
+          <a href="https://maps.google.com/?q=Av.+Iraí,+519,+Pinhais,+PR" target="_blank" class="btn-directions">
+            🗺️ Abrir no Google Maps
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+  <div class="container">
+    <span class="footer-logo">Espaço Dlevis Lounge & Bar</span>
+    <p class="footer-phrase">"Viva a noite do jeito certo"</p>
+    <div class="social-links">
+      <a href="https://wa.me/5541995459915" target="_blank" class="social-link" title="WhatsApp">💬</a>
+      <a href="#" class="social-link" title="Instagram">📸</a>
+      <a href="#" class="social-link" title="Facebook">👤</a>
+      <a href="#" class="social-link" title="TikTok">🎵</a>
+    </div>
+    <p class="footer-copy">© 2025 Espaço Dlevis Lounge & Bar · Av. Iraí, 519 · Pinhais, PR · Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<style>
+@keyframes orbFloat1 { 0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(30px,-20px) scale(1.05);} }
+@keyframes orbFloat2 { 0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-20px,30px) scale(1.08);} }
+@keyframes orbFloat3 { 0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(15px,-25px) scale(.95);} }
+</style>
+
+<script>
+// ── CURSOR
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.transform = `translate(${mx-6}px,${my-6}px)`;
+});
+function animateRing(){
+  rx += (mx-rx-18)*.12;
+  ry += (my-ry-18)*.12;
+  ring.style.transform = `translate(${rx}px,${ry}px)`;
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+document.querySelectorAll('a,button,.galeria-item,.exp-card,.stat-card,.avaliacao-card,.contato-info-item,.social-link').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform += ' scale(1.8)';
+    cursor.style.background = 'var(--neon-blue)';
+    ring.style.opacity = '1';
+    ring.style.borderColor = 'var(--neon-blue)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.background = 'var(--neon-purple)';
+    ring.style.opacity = '.6';
+    ring.style.borderColor = 'var(--neon-purple)';
+  });
+});
+
+// ── LOADER
+window.addEventListener('load', () => {
+  const logo = document.getElementById('loaderLogo');
+  const fill = document.getElementById('loaderFill');
+  const text = document.getElementById('loaderText');
+  const loader = document.getElementById('loader');
+
+  gsap.to(logo, { opacity:1, y:0, duration:.8, ease:'power3.out' });
+  gsap.to(text, { opacity:1, duration:.6, delay:.3 });
+
+  setTimeout(() => { fill.style.width = '100%'; }, 200);
+
+  setTimeout(() => {
+    gsap.to(loader, {
+      opacity:0, duration:.8, ease:'power2.inOut',
+      onComplete: () => { loader.style.display='none'; startHeroAnim(); }
+    });
+  }, 2600);
+});
+
+function startHeroAnim() {
+  gsap.registerPlugin(TextPlugin, ScrollTrigger);
+  const tl = gsap.timeline();
+  tl.to('#heroEyebrow',   { opacity:1, y:0, duration:.7, ease:'power3.out' })
+    .to('#heroTitle',     { opacity:1, y:0, duration:.9, ease:'power3.out', filter:'drop-shadow(0 0 40px rgba(191,95,255,.5))' }, '-=.3')
+    .to('#heroSubtitle',  { opacity:1, y:0, duration:.7, ease:'power3.out' }, '-=.4')
+    .to('#heroButtons',   { opacity:1, y:0, duration:.7, ease:'power3.out' }, '-=.3')
+    .to('#heroScroll',    { opacity:1, duration:.5 }, '-=.2');
+
+  gsap.set(['#heroEyebrow','#heroTitle','#heroSubtitle','#heroButtons'], { y:30 });
+}
+
+// ── SMOKE PARTICLES
+const smokeLayer = document.getElementById('smokeLayer');
+const smokeColors = ['rgba(123,47,247,.4)','rgba(191,95,255,.3)','rgba(0,212,255,.2)','rgba(201,168,76,.15)'];
+for(let i=0;i<8;i++){
+  const p = document.createElement('div');
+  p.className = 'smoke-particle';
+  p.style.cssText = `
+    width:${120+Math.random()*200}px;
+    height:${120+Math.random()*200}px;
+    background:${smokeColors[Math.floor(Math.random()*smokeColors.length)]};
+    left:${Math.random()*100}%;
+    animation-duration:${8+Math.random()*12}s;
+    animation-delay:${-Math.random()*10}s;
+  `;
+  smokeLayer.appendChild(p);
+}
+
+// ── PARTICLES CANVAS
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles=[];
+function resizeCanvas(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const pColors = ['rgba(191,95,255,','rgba(0,212,255,','rgba(201,168,76,'];
+for(let i=0;i<80;i++){
+  particles.push({
+    x:Math.random()*window.innerWidth,
+    y:Math.random()*window.innerHeight,
+    r:Math.random()*2+.5,
+    sx:(Math.random()-.5)*.4,
+    sy:(Math.random()-.5)*.4,
+    a:Math.random(),
+    da:(Math.random()-.5)*.008,
+    c:pColors[Math.floor(Math.random()*pColors.length)]
+  });
+}
+function drawParticles(){
+  ctx.clearRect(0,0,W,H);
+  particles.forEach(p => {
+    p.x+=p.sx; p.y+=p.sy;
+    p.a+=p.da;
+    if(p.a<0||p.a>1) p.da*=-1;
+    if(p.x<0) p.x=W; if(p.x>W) p.x=0;
+    if(p.y<0) p.y=H; if(p.y>H) p.y=0;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=p.c+p.a+')';
+    ctx.fill();
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ── NAV
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+  document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 400);
+});
+
+// ── HAMBURGER
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('open');
+});
+function closeMobileMenu(){
+  hamburger.classList.remove('active');
+  mobileMenu.classList.remove('open');
+}
+
+// ── CAROUSEL
+let currentSlide = 0;
+const track = document.getElementById('carouselTrack');
+const cards = track.querySelectorAll('.avaliacao-card');
+const dots = document.querySelectorAll('.dot');
+const cardW = () => {
+  const gap=24;
+  const visibleCount = window.innerWidth<600?1:window.innerWidth<900?2:3;
+  return (track.parentElement.offsetWidth - gap*(visibleCount-1)) / visibleCount + gap;
+};
+const maxSlide = () => Math.max(0, cards.length - (window.innerWidth<600?1:window.innerWidth<900?2:3));
+
+function goToSlide(i) {
+  currentSlide = Math.max(0, Math.min(i, maxSlide()));
+  track.style.transform = `translateX(-${currentSlide * cardW()}px)`;
+  dots.forEach((d,j) => d.classList.toggle('active', j===currentSlide));
+}
+function nextSlide(){ goToSlide(currentSlide+1 > maxSlide() ? 0 : currentSlide+1); }
+function prevSlide(){ goToSlide(currentSlide-1 < 0 ? maxSlide() : currentSlide-1); }
+setInterval(nextSlide, 4000);
+window.addEventListener('resize', () => goToSlide(currentSlide));
+
+// ── LIGHTBOX
+const scenes = [
+  { icon:'💨', title:'Narguilé Premium', desc:'Preparado com os melhores sabores, fumaça densa e qualidade superior.' },
+  { icon:'🍸', title:'Drinks & Coquetéis', desc:'Cardápio completo com drinks autorais e bebidas geladas para todos os gostos.' },
+  { icon:'✨', title:'Iluminação Premium', desc:'Ambiente com iluminação cuidadosamente planejada para criar a vibe perfeita.' },
+  { icon:'🎶', title:'Noite de Lounge', desc:'Curadoria musical exclusiva que define o ritmo da sua noite.' },
+  { icon:'🏆', title:'Momentos Especiais', desc:'Cada visita é uma experiência única e memorável.' },
+];
+const lightbox = document.getElementById('lightbox');
+const lbContent = document.getElementById('lightboxContent');
+function openLightbox(i){
+  const s = scenes[i];
+  lbContent.innerHTML = `
+    <div style="font-size:5rem;filter:drop-shadow(0 0 30px rgba(191,95,255,.5))">${s.icon}</div>
+    <h3 style="font-family:'Cinzel Decorative',serif;font-size:1.4rem;color:var(--white)">${s.title}</h3>
+    <p style="color:rgba(240,238,255,.7);text-align:center;max-width:320px;line-height:1.7">${s.desc}</p>
+    <a href="#reserva" onclick="closeLightbox()" class="btn-primary" style="margin-top:1rem">✦ Reservar Mesa</a>
+  `;
+  lightbox.classList.add('open');
+  gsap.from(lbContent, { scale:.85, opacity:0, duration:.4, ease:'power3.out' });
+}
+function closeLightbox(){ lightbox.classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
+
+// ── MUSIC TOGGLE
+const musicBtn = document.getElementById('musicToggle');
+let audioCtx = null, isPlaying = false;
+musicBtn.addEventListener('click', () => {
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  if(!isPlaying){
+    musicBtn.classList.add('playing');
+    musicBtn.textContent = '🎵';
+    isPlaying = true;
+    playAmbient(audioCtx);
+  } else {
+    audioCtx.close();
+    audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    musicBtn.classList.remove('playing');
+    isPlaying = false;
+  }
+});
+
+function playAmbient(ctx) {
+  const notes = [110, 130.81, 164.81, 196, 220, 261.63];
+  function playNote(){
+    if(!isPlaying) return;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const freq = notes[Math.floor(Math.random()*notes.length)];
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(.04, ctx.currentTime+1.5);
+    gain.gain.linearRampToValueAtTime(0, ctx.currentTime+4);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime+4);
+    setTimeout(playNote, 2000 + Math.random()*2000);
+  }
+  playNote();
+}
+
+// ── RESERVATION
+function sendReservation() {
+  const nome = document.getElementById('formNome').value.trim();
+  const wpp = document.getElementById('formWpp').value.trim();
+  const data = document.getElementById('formData').value;
+  const pessoas = document.getElementById('formPessoas').value;
+  const horario = document.getElementById('formHorario').value;
+
+  if(!nome || !wpp){
+    alert('Por favor, preencha seu nome e WhatsApp.');
+    return;
+  }
+
+  const dateStr = data ? new Date(data+'T12:00:00').toLocaleDateString('pt-BR') : 'A combinar';
+  const msg = encodeURIComponent(
+    `Olá! Gostaria de reservar uma mesa no Espaço Dlevis 🌙\n\n` +
+    `👤 Nome: ${nome}\n` +
+    `📅 Data: ${dateStr}\n` +
+    `⏰ Horário: ${horario || 'A combinar'}\n` +
+    `👥 Pessoas: ${pessoas || 'A combinar'}\n\n` +
+    `Aguardo confirmação! 🥃`
+  );
+  window.open(`https://wa.me/5541995459915?text=${msg}`, '_blank');
+}
+
+// ── AOS
+AOS.init({ duration:800, once:true, offset:80 });
+
+// ── GSAP SCROLL EFFECTS
+gsap.registerPlugin(ScrollTrigger);
+gsap.utils.toArray('.exp-card').forEach((card, i) => {
+  gsap.from(card, {
+    scrollTrigger: { trigger: card, start:'top 85%' },
+    opacity:0, y:40, duration:.7, delay:i*.08, ease:'power3.out'
+  });
+});
+
+// PARALLAX hero grid
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  document.querySelector('.hero-grid').style.transform = `translateY(${y*.2}px)`;
+});
+</script>
+
+</body>
+</html>
